@@ -1,7 +1,9 @@
+from __future__ import annotations
+
+import socket
 import subprocess
 import sys
 import time
-import socket
 from pathlib import Path
 
 import requests
@@ -9,42 +11,55 @@ import streamlit as st
 
 from agents.buyer_agent import BuyerAgent
 from agents.seller_agent import SellerAgent
-from business.chat_policy import validate_chat_proposal
-from chat_client import (
-    ChatSocketError,
-    check_chat_connection,
-    create_chat_room,
-    exchange_agent_message,
-    send_seller_message,
-    set_chat_permission,
-    send_chat_message,
-)
 from business.agreement import record_agreement
+from business.chat_policy import validate_chat_proposal
 from business.negotiation import NegotiationEngine
 from business.recovery import RecoveryManager
 from business.transaction import TransactionState, TransactionStateMachine
 from business.trust import verify_integrity
 from business.verification import verify_agreement
+from chat_client import (
+    ChatSocketError,
+    check_chat_connection,
+    create_chat_room,
+    exchange_agent_message,
+    send_chat_message,
+    set_chat_permission,
+)
 from data import demo_sellers
 from llm.ollama_client import OllamaClient, OllamaError
 from schemas import NegotiationMessage
 
-st.set_page_config(page_title="CommerceOS", page_icon="◈", layout="wide", initial_sidebar_state="expanded")
 
+st.set_page_config(
+    page_title="CommerceOS",
+    page_icon="◈",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
 
 CHAT_HEALTH_URL = "http://127.0.0.1:8765/health"
 CHAT_HOST = "127.0.0.1"
 CHAT_PORT = 8765
+NAVIGATION = [
+    "Overview",
+    "Buyer Workspace",
+    "Agent Negotiations",
+    "Seller Portal",
+    "Approvals",
+    "Conversations",
+    "Agreements & Verification",
+    "Transaction History",
+]
 
 
 def _chat_health(timeout: float = 6) -> str | None:
     try:
         response = requests.get(CHAT_HEALTH_URL, timeout=timeout)
         response.raise_for_status()
-        payload = response.json()
-        if payload.get("status") == "ok":
+        if response.json().get("status") == "ok":
             return None
-        return f"unexpected health response: {payload}"
+        return f"unexpected health response: {response.text}"
     except (requests.RequestException, ValueError, TypeError) as exc:
         return str(exc)
 
@@ -64,15 +79,14 @@ def ensure_chat_server() -> None:
                 return
             time.sleep(0.5)
         raise ChatSocketError(
-            "Port 8765 is already occupied, but the existing process is not answering "
-            "the CommerceOS health check. Stop the stale process and restart Streamlit."
+            "Port 8765 is occupied, but the existing service is not healthy."
         )
     process = st.session_state.get("chat_server_process")
     if process is None or process.poll() is not None:
-        log_dir = Path(__file__).parent
+        root = Path(__file__).parent
         process = subprocess.Popen(
-            [sys.executable, str(log_dir / "chat_server.py")],
-            cwd=Path(__file__).parent,
+            [sys.executable, str(root / "chat_server.py")],
+            cwd=root,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
@@ -84,451 +98,502 @@ def ensure_chat_server() -> None:
             return
         if process.poll() is not None:
             stderr = (process.stderr.read() if process.stderr else "").strip()
-            if _chat_health() is None:
-                return
-            detail = stderr or health_error
-            raise ChatSocketError(f"Chat service exited during startup: {detail}")
+            raise ChatSocketError(
+                f"Chat service exited during startup: {stderr or health_error}"
+            )
         time.sleep(0.5)
-    health_error = _chat_health()
     raise ChatSocketError(
-        "Chat service did not become healthy on port 8765. "
-        f"Health check: {health_error or 'unknown error'}"
+        f"Chat service did not become healthy on port 8765: {_chat_health()}"
     )
 
-st.markdown(
-    """
-    <style>
-    :root { color-scheme: light; }
-    .stApp, [data-testid="stAppViewContainer"] { background: #f5f7fb; color: #172033; }
-    [data-testid="stHeader"] { background: rgba(245,247,251,.92); }
-    [data-testid="stSidebar"] { background: #0f172a; }
-    [data-testid="stSidebar"] * { color: #e2e8f0; }
-    [data-testid="stSidebar"] .stCaption { color: #94a3b8 !important; }
-    [data-testid="stSidebar"] [data-baseweb="radio"] label { color: #e2e8f0 !important; }
-    [data-testid="stSidebar"] code { background: #1e293b; color: #bfdbfe; }
-    .main .block-container { max-width: 1440px; padding-top: 2.5rem; padding-bottom: 3rem; }
-    .main h1, .main h2, .main h3, .main p, .main label,
-    .main [data-testid="stMetricLabel"], .main [data-testid="stMetricValue"] { color: #172033 !important; }
-    .hero { background: linear-gradient(135deg,#111c38,#293f80); color:#fff; padding:28px 32px; border-radius:18px; margin-bottom:24px; box-shadow:0 12px 30px rgba(15,23,42,.12); }
-    .hero h1 { margin:0; font-size:2.25rem; }
-    .hero p { margin:8px 0 0; color:#cbd5e1; }
-    .card { background:white; border:1px solid #e2e8f0; border-radius:16px; padding:20px; box-shadow:0 4px 18px rgba(15,23,42,.05); }
-    .muted { color:#64748b; font-size:.9rem; }
-    .pill { display:inline-block; padding:5px 10px; border-radius:999px; background:#dcfce7; color:#166534; font-weight:600; font-size:.8rem; }
-    [data-testid="stAlert"] { border-radius:14px; }
-    [data-testid="stAlert"] p, [data-testid="stAlert"] span { color:#172033 !important; }
-    [data-testid="stAlert"][kind="success"] { background:#dcfce7; border:1px solid #86efac; }
-    [data-testid="stAlert"][kind="info"] { background:#dbeafe; border:1px solid #93c5fd; }
-    [data-testid="stAlert"][kind="error"] { background:#fee2e2; border:1px solid #fca5a5; }
-    [data-testid="stAlert"][kind="warning"] { background:#fef3c7; border:1px solid #fcd34d; }
-    [data-testid="stTextInput"] input, [data-testid="stTextArea"] textarea,
-    [data-testid="stNumberInput"] input { color:#172033 !important; background:#fff !important; }
-    [data-testid="stMetric"] { background:#fff; border:1px solid #e2e8f0; padding:14px 16px; border-radius:14px; }
-    [data-testid="stMetricLabel"] { color:#64748b !important; }
-    [data-testid="stMetricValue"] { color:#172033 !important; }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
 
-if "result" not in st.session_state:
-    st.session_state.result = None
-if "transaction_machine" not in st.session_state:
-    st.session_state.transaction_machine = TransactionStateMachine()
-if "approval_chat_open" not in st.session_state:
-    st.session_state.approval_chat_open = False
-if "chat_socket_status" not in st.session_state:
-    st.session_state.chat_socket_status = "not connected"
-if "direct_chat_messages" not in st.session_state:
-    st.session_state.direct_chat_messages = []
-if "agent_chat_messages" not in st.session_state:
-    st.session_state.agent_chat_messages = []
-if "agent_chat_open" not in st.session_state:
-    st.session_state.agent_chat_open = False
+def initialize_state() -> None:
+    defaults = {
+        "result": None,
+        "request_text": "",
+        "transaction_machine": TransactionStateMachine(),
+        "chat_socket_status": "not connected",
+        "agent_messages": {},
+        "direct_messages": {},
+        "agreement": None,
+        "transaction_history": [],
+        "checkout_authorized": False,
+        "pending_navigation": None,
+    }
+    for key, value in defaults.items():
+        if key not in st.session_state:
+            st.session_state[key] = value
+
+
+def current_bundle():
+    if not st.session_state.result:
+        return None
+    return st.session_state.result
+
+
+def sellers_and_products():
+    sellers = [SellerAgent(profile, llm=st.session_state.ollama if st.session_state.ollama_ready else None) for profile in demo_sellers()]
+    products = {product.product_id: product for seller in sellers for product in seller.profile.products}
+    return sellers, products
+
+
+def prepare_chat_rooms(request, result, products) -> None:
+    if not result.selected_offer:
+        return
+    offer = result.selected_offer
+    if not result.chat_room_id:
+        result.chat_room_id = offer.offer_id
+    if not result.direct_chat_room_id:
+        result.direct_chat_room_id = f"{result.chat_room_id}-direct"
+    profile = next(profile for profile in demo_sellers() if profile.seller_id == offer.seller_id)
+    ensure_chat_server()
+    create_chat_room(
+        result.chat_room_id,
+        buyer_context={
+            "role": "buyer procurement agent",
+            "request": request.model_dump(),
+            "hard_constraints": request.hard_constraints,
+            "budget_inr": request.max_budget_inr,
+        },
+        supplier_context={
+            "role": "supplier agent",
+            "supplier_id": profile.seller_id,
+            "supplier_name": profile.display_name,
+            "private_policies": profile.policies[offer.product_id].model_dump(),
+            "product": products[offer.product_id].model_dump(),
+        },
+        agent_chat_enabled=True,
+    )
+    create_chat_room(
+        result.direct_chat_room_id,
+        buyer_context={"role": "buyer human", "request": request.model_dump()},
+        supplier_context={"role": "seller human", "supplier_id": profile.seller_id},
+        agent_chat_enabled=False,
+    )
+
+
+def page_header(title: str, description: str) -> None:
+    st.title(title)
+    st.caption(description)
+    st.divider()
+
+
+def status_badge(label: str, state: str) -> None:
+    colors = {
+        "success": ("#dcfce7", "#166534"),
+        "warning": ("#fef3c7", "#92400e"),
+        "error": ("#fee2e2", "#991b1b"),
+        "info": ("#dbeafe", "#1e40af"),
+    }
+    background, foreground = colors.get(state, colors["info"])
+    st.markdown(
+        f'<span style="background:{background};color:{foreground};padding:5px 10px;border-radius:999px;font-weight:600;font-size:.85rem">{label}</span>',
+        unsafe_allow_html=True,
+    )
+
+
+def render_transaction_context(request, result) -> None:
+    if not result or not result.selected_offer:
+        return
+    offer = result.selected_offer
+    st.caption(
+        f"Transaction `{offer.offer_id[:8]}` · Seller `{offer.seller_id}` · "
+        f"{offer.quantity} unit(s) · ₹{offer.total_price_inr:,}"
+    )
+
+
+def render_offer(offer, products, selected_offer) -> None:
+    product = products[offer.product_id]
+    with st.container(border=True):
+        left, middle, right = st.columns([2, 1, 1])
+        left.write(f"**{offer.seller_id}** — {product.name}")
+        left.caption(f"{product.rating}★ · {product.review_count:,} reviews · {product.stock} in stock")
+        middle.metric("Total", f"₹{offer.total_price_inr:,}")
+        right.metric("Delivery", f"{offer.delivery_days} days")
+        if offer == selected_offer:
+            status_badge("Recommended offer", "success")
+        elif offer.status == "rejected":
+            status_badge("Rejected", "error")
+        else:
+            status_badge("Offer received", "info")
+        if offer.requires_seller_approval and offer.seller_approval_status != "approved":
+            st.warning("Seller approval is required because this price is below the automatic approval floor.")
+
+
+def run_purchase_request(text: str, ollama: OllamaClient, ollama_ready: bool) -> None:
+    if not text.strip():
+        st.error("Describe what you want to buy first.")
+        return
+    with st.status("Running autonomous procurement…", expanded=True) as progress:
+        try:
+            ensure_chat_server()
+            progress.write("Buyer Agent is extracting requirements…")
+            buyer = BuyerAgent(llm=ollama if ollama_ready else None)
+            request = buyer.parse_request(text)
+            progress.write("Supplier Agents are checking inventory and negotiating…")
+            sellers, products = sellers_and_products()
+            result = NegotiationEngine(buyer).run(request, sellers, products)
+            st.session_state.transaction_machine = TransactionStateMachine()
+            st.session_state.transaction_machine.transition(TransactionState.NEGOTIATING)
+            prepare_chat_rooms(request, result, products)
+            st.session_state.result = (request, result, products, buyer)
+            st.session_state.agent_messages = {}
+            st.session_state.direct_messages = {}
+            st.session_state.agreement = None
+            st.session_state.checkout_authorized = False
+            st.session_state.transaction_history.insert(0, {
+                "id": result.selected_offer.offer_id if result.selected_offer else "no-offer",
+                "status": "negotiating" if result.selected_offer else "no compliant offer",
+                "seller": result.selected_offer.seller_id if result.selected_offer else "—",
+                "total": result.selected_offer.total_price_inr if result.selected_offer else 0,
+            })
+            progress.update(label="Procurement request ready", state="complete", expanded=False)
+        except (ChatSocketError, OllamaError, ValueError, RuntimeError) as exc:
+            progress.update(label="Procurement request failed", state="error", expanded=True)
+            st.error(f"CommerceOS could not complete the request: {exc}")
+
+
+def render_overview() -> None:
+    page_header("CommerceOS command center", "One clear view of requests, approvals, negotiations, and agreement safety.")
+    bundle = current_bundle()
+    result = bundle[1] if bundle else None
+    active = bool(result and result.selected_offer)
+    pending_approval = bool(
+        result and result.selected_offer and
+        result.selected_offer.requires_seller_approval and
+        result.selected_offer.seller_approval_status != "approved"
+    )
+    chat_request = bool(result and result.supplier_chat_status == "pending")
+    metrics = [
+        ("Active request", "1" if active else "0"),
+        ("Agents negotiating", str(len(result.offers) + 1) if result else "0"),
+        ("Pending approvals", str(int(pending_approval) + int(chat_request))),
+        ("Checkout status", "Blocked" if not st.session_state.checkout_authorized else "Authorized"),
+    ]
+    cols = st.columns(4)
+    for col, (label, value) in zip(cols, metrics):
+        col.metric(label, value)
+    if not active:
+        st.info("Nothing is running yet. Start with **Create Purchase Request**.")
+        if st.button("Create Purchase Request", type="primary"):
+            st.session_state.pending_navigation = "Buyer Workspace"
+            st.rerun()
+        return
+    request, result, products, buyer = bundle
+    st.subheader("Current transaction")
+    render_transaction_context(request, result)
+    st.write(f"**Buyer need:** {request.original_text}")
+    st.write(f"**Current state:** `{st.session_state.transaction_machine.state.value}`")
+    next_step = "Review seller approval" if pending_approval else "Review the recommended offer"
+    st.info(f"Next step: **{next_step}**. Use the navigation on the left.")
+    if chat_request:
+        st.warning("A supplier has requested direct contact. Review it in Buyer Workspace.")
+
+
+def render_buyer_workspace(ollama, ollama_ready) -> None:
+    page_header("Buyer Workspace", "Describe the purchase. CommerceOS extracts constraints, negotiates, and protects your budget.")
+    text = st.text_area(
+        "What do you need?",
+        value=st.session_state.request_text or "Find a gaming laptop with an RTX 3050 or better, at least 16 GB RAM, under ₹70,000. Prioritize ratings and reviews.",
+        height=120,
+        key="purchase_request_text",
+    )
+    if st.button("Create Purchase Request", type="primary"):
+        st.session_state.request_text = text
+        run_purchase_request(text, ollama, ollama_ready)
+    bundle = current_bundle()
+    if not bundle:
+        st.info("Your extracted requirements and supplier offers will appear here after submission.")
+        return
+    request, result, products, buyer = bundle
+    st.subheader("Buyer Agent interpretation")
+    a, b, c = st.columns(3)
+    a.metric("Category", request.product_category)
+    b.metric("Quantity", request.quantity)
+    c.metric("Maximum budget", f"₹{request.max_budget_inr:,}")
+    st.write("**Mandatory requirements:**", request.hard_constraints or "None extracted")
+    st.write("**Preferences:**", ", ".join(request.preferences) or "None")
+    if buyer.last_error:
+        st.warning(f"Gemma output was rejected and fallback parsing was used: {buyer.last_error}")
+    st.subheader("Eligible supplier offers")
+    for offer in result.offers:
+        render_offer(offer, products, result.selected_offer)
+    if result.selected_offer:
+        st.success(f"Recommended: {result.selected_offer.seller_id} at ₹{result.selected_offer.total_price_inr:,} total.")
+    else:
+        st.error(result.reason)
+    if result.supplier_chat_status == "pending" and result.supplier_chat_request:
+        st.subheader("Supplier direct-chat request")
+        st.info(f"**Why:** {result.supplier_chat_request}")
+        st.caption("This is separate from autonomous AI negotiation. Direct chat opens only after acceptance.")
+        accept, decline = st.columns(2)
+        if accept.button("Accept Chat Request", type="primary"):
+            try:
+                set_chat_permission(result.direct_chat_room_id, True)
+                result.supplier_chat_status = "approved"
+                st.session_state.result = (request, result, products, buyer)
+                st.success("Direct conversation opened. Go to Conversations.")
+                st.rerun()
+            except ChatSocketError as exc:
+                st.error(f"Could not open direct conversation: {exc}")
+        if decline.button("Decline Chat Request"):
+            try:
+                set_chat_permission(result.direct_chat_room_id, False)
+            except ChatSocketError as exc:
+                st.error(str(exc))
+            result.supplier_chat_status = "rejected"
+            st.session_state.result = (request, result, products, buyer)
+            st.rerun()
+
+
+def render_agent_negotiations() -> None:
+    page_header("Agent Negotiations", "Observe the real Buyer Agent and Supplier Agent negotiation. Human approval is not needed for ordinary AI messages.")
+    bundle = current_bundle()
+    if not bundle:
+        st.info("Create a purchase request to start an agent negotiation.")
+        return
+    request, result, products, buyer = bundle
+    render_transaction_context(request, result)
+    st.subheader("Negotiation timeline")
+    for message in result.messages:
+        with st.container(border=True):
+            role = {"buyer_agent": "Buyer Agent", "seller_agent": "Supplier Agent", "system": "System"}.get(message.sender_role, message.sender_role)
+            st.caption(f"{role} · Round {message.round_number} · {message.message_type}")
+            st.write(message.message)
+    st.subheader("Current decision")
+    if result.selected_offer:
+        render_offer(result.selected_offer, products, result.selected_offer)
+    for reason in result.decision_trace:
+        st.write(f"• {reason}")
+    if result.chat_room_id:
+        st.info("Need clarification? The buyer can message the Supplier Agent in this AI negotiation room. Direct human chat is a separate permissioned conversation.")
+        prompt = st.text_input("Message Supplier Agent", key="agent_negotiation_prompt")
+        if st.button("Send to Supplier Agent") and prompt.strip():
+            try:
+                messages = send_chat_message(result.chat_room_id, "buyer-user", prompt, result.selected_offer.round_number)
+                st.session_state.agent_messages.setdefault(result.chat_room_id, []).extend(messages)
+                st.rerun()
+            except ChatSocketError as exc:
+                st.error(str(exc))
+        for item in st.session_state.agent_messages.get(result.chat_room_id, []):
+            st.chat_message("user" if item["sender_role"] == "buyer-user" else "assistant").write(item["message"])
+
+
+def render_seller_portal(ollama, ollama_ready) -> None:
+    page_header("Seller Portal", "Manage your catalog, policies, active AI negotiations, and requests for buyer contact.")
+    sellers, products = sellers_and_products()
+    st.subheader("Seller catalog")
+    for seller in sellers:
+        with st.expander(f"{seller.profile.display_name} · {seller.profile.seller_id}", expanded=True):
+            for product in seller.profile.products:
+                policy = seller.profile.policies[product.product_id]
+                st.write(f"**{product.name}** · {product.stock} in stock · ₹{product.listed_price_inr:,} listed · {product.delivery_days} days")
+                st.caption(f"Hard minimum ₹{policy.minimum_price_inr:,} · Automatic approval floor ₹{policy.automatic_approval_floor_inr:,}")
+    bundle = current_bundle()
+    if not bundle:
+        st.info("Active negotiations will appear here after a buyer creates a request.")
+        return
+    request, result, products, buyer = bundle
+    if not result.selected_offer:
+        st.info("No compliant offer is currently available.")
+        return
+    offer = result.selected_offer
+    seller = next(s for s in sellers if s.profile.seller_id == offer.seller_id)
+    st.subheader("Active negotiation")
+    st.write(f"**Buyer request:** {request.original_text}")
+    render_offer(offer, products, offer)
+    if result.supplier_chat_status == "pending":
+        st.warning("The Supplier Agent has requested direct buyer contact. The buyer must accept it in Buyer Workspace.")
+    elif result.supplier_chat_status == "approved":
+        st.success("Direct buyer conversation approved. Open Conversations.")
+    elif st.button("Request Direct Chat with Buyer"):
+        try:
+            request_text = seller.request_direct_chat(request, products[offer.product_id], offer)
+            result.supplier_chat_request = request_text
+            result.supplier_chat_status = "pending"
+            st.session_state.result = (request, result, products, buyer)
+            st.rerun()
+        except (OllamaError, ValueError) as exc:
+            st.error(f"Supplier Agent could not create a request: {exc}")
+    if offer.requires_seller_approval and offer.seller_approval_status != "approved":
+        st.warning("This offer needs seller approval. Review it in Approvals.")
+
+
+def render_approvals() -> None:
+    page_header("Approvals", "Only policy-sensitive actions appear here. Ordinary agent conversation does not require manual approval.")
+    bundle = current_bundle()
+    if not bundle:
+        st.info("There are no approval requests.")
+        return
+    request, result, products, buyer = bundle
+    offer = result.selected_offer
+    if not offer:
+        st.info("There are no approval requests.")
+        return
+    if not offer.requires_seller_approval or offer.seller_approval_status == "approved":
+        st.success("No pending seller approval.")
+        return
+    seller = next(profile for profile in demo_sellers() if profile.seller_id == offer.seller_id)
+    policy = seller.policies[offer.product_id]
+    st.warning(f"Seller approval required for {offer.seller_id}: ₹{offer.unit_price_inr:,}/unit is below the automatic floor.")
+    st.write(f"**Buyer:** procurement request · **Product:** {products[offer.product_id].name} · **Quantity:** {offer.quantity}")
+    st.write(f"**Policy trigger:** automatic floor ₹{policy.automatic_approval_floor_inr:,}; hard minimum ₹{policy.minimum_price_inr:,}.")
+    approve, reject = st.columns(2)
+    if approve.button("Approve Offer", type="primary"):
+        result.selected_offer = offer.model_copy(update={"seller_approval_status": "approved"})
+        result.events.append("Seller human approval granted.")
+        result.messages.append(NegotiationMessage(
+            sender_id="seller-human",
+            sender_role="seller_human",
+            message="Seller approved the negotiated commercial terms.",
+            round_number=offer.round_number,
+            message_type="approval_response",
+            related_offer_id=offer.offer_id,
+        ))
+        st.session_state.result = (request, result, products, buyer)
+        st.rerun()
+    if reject.button("Reject Offer"):
+        result.selected_offer = offer.model_copy(update={"seller_approval_status": "rejected", "status": "rejected"})
+        result.events.append("Seller human rejected the offer.")
+        st.session_state.result = (request, result, products, buyer)
+        st.rerun()
+
+
+def render_conversations() -> None:
+    page_header("Conversations", "AI negotiation and direct human communication are separate threads linked to the same transaction.")
+    bundle = current_bundle()
+    if not bundle:
+        st.info("Create a purchase request first.")
+        return
+    request, result, products, buyer = bundle
+    if result.supplier_chat_status != "approved" or not result.direct_chat_room_id:
+        st.info("No direct conversation is open. The buyer must accept a supplier request in Buyer Workspace.")
+        return
+    offer = result.selected_offer
+    st.success(f"Direct conversation · transaction {offer.offer_id[:8]} · connected participants")
+    try:
+        check_chat_connection(result.direct_chat_room_id, "buyer-human")
+        st.session_state.chat_socket_status = "connected"
+    except ChatSocketError as exc:
+        st.session_state.chat_socket_status = f"offline: {exc}"
+    st.caption(f"WebSocket status: {st.session_state.chat_socket_status}")
+    participant = st.radio("Send as", ["Buyer (human)", "Seller (human)"], horizontal=True)
+    role = "buyer-human" if participant.startswith("Buyer") else "seller-human"
+    for message in st.session_state.direct_messages.get(result.direct_chat_room_id, []):
+        label = {
+            "buyer-human": "Buyer · human",
+            "seller-human": "Seller · human",
+            "buyer-agent": "Buyer Agent",
+            "supplier-agent": "Supplier Agent",
+        }.get(message["sender_role"], "System")
+        with st.chat_message("user" if "human" in message["sender_role"] else "assistant"):
+            st.caption(label)
+            st.write(message["message"])
+            if message.get("proposal"):
+                st.warning(f"Unapplied proposal: {message['proposal']}")
+    text = st.chat_input("Write a direct message…", key="direct_conversation_input")
+    if text:
+        try:
+            messages = send_chat_message(result.direct_chat_room_id, role, text, offer.round_number)
+            st.session_state.direct_messages.setdefault(result.direct_chat_room_id, []).extend(messages)
+            st.rerun()
+        except ChatSocketError as exc:
+            st.error(f"Message was not sent: {exc}")
+    st.divider()
+    st.caption("A chat proposal never changes the offer automatically. It must pass deterministic policy validation and then return to Approvals.")
+    proposals = [item for item in st.session_state.direct_messages.get(result.direct_chat_room_id, []) if item.get("proposal")]
+    if proposals:
+        seller = next(profile for profile in demo_sellers() if profile.seller_id == offer.seller_id)
+        policy = seller.policies[offer.product_id]
+        product = products[offer.product_id]
+        for item in proposals:
+            valid, errors = validate_chat_proposal(item["proposal"], request, offer, product, policy)
+            if valid:
+                st.success(f"Policy-valid proposal awaiting explicit application: {item['proposal']}")
+            else:
+                st.error(f"Proposal rejected: {', '.join(errors)}")
+
+
+def render_agreements() -> None:
+    page_header("Agreements & Verification", "Accepted terms are hashed, versioned, and checked before simulated checkout.")
+    bundle = current_bundle()
+    if not bundle or not bundle[1].selected_offer:
+        st.info("There is no accepted offer to verify.")
+        return
+    request, result, products, buyer = bundle
+    offer = result.selected_offer
+    if offer.requires_seller_approval and offer.seller_approval_status != "approved":
+        st.error("Agreement recording is blocked until seller approval is complete.")
+        return
+    if st.session_state.agreement is None:
+        st.session_state.agreement = record_agreement(offer)
+    agreement = st.session_state.agreement
+    integrity = verify_integrity(agreement)
+    st.subheader("Accepted agreement")
+    st.json(agreement.model_dump())
+    status_badge("Integrity verified" if integrity.passed else "Integrity failed", "success" if integrity.passed else "error")
+    if integrity.passed and st.button("Authorize simulated checkout", type="primary"):
+        st.session_state.checkout_authorized = True
+        st.session_state.transaction_machine.transition(TransactionState.FULFILLED)
+        st.success("Simulated checkout authorized. No real payment was processed.")
+    changed = offer.model_copy(update={"unit_price_inr": offer.unit_price_inr + 2000, "total_price_inr": (offer.unit_price_inr + 2000) * offer.quantity})
+    verification = verify_agreement(agreement, changed)
+    st.subheader("Tamper detection")
+    if verification.passed:
+        st.success("No mismatch detected.")
+    else:
+        st.error("Checkout blocked: " + "; ".join(verification.mismatches))
+        fallback = next((candidate for candidate in result.offers if candidate.seller_id != offer.seller_id), None)
+        if st.button("Record payment block and recover"):
+            recovery = RecoveryManager()
+            recovered, recovered_agreement = recovery.detect_and_recover(agreement, changed, fallback)
+            st.session_state.transaction_machine.transition(TransactionState.PAYMENT_BLOCKED)
+            if recovered and recovered_agreement:
+                st.session_state.transaction_machine.transition(TransactionState.RECOVERED)
+                st.success("Recovery recorded and a new agreement version was created.")
+                st.json(recovered_agreement.model_dump())
+
+
+def render_history() -> None:
+    page_header("Transaction History", "Every run remains visible with its current status and transaction identifier.")
+    if not st.session_state.transaction_history:
+        st.info("No transactions yet.")
+        return
+    for item in st.session_state.transaction_history:
+        with st.container(border=True):
+            st.write(f"**Transaction:** `{item['id']}`")
+            st.write(f"Seller: {item['seller']} · Total: ₹{item['total']:,} · Status: **{item['status']}**")
+
+
+initialize_state()
 ollama = OllamaClient()
-ollama_ready = ollama.is_available()
+st.session_state.ollama = ollama
+st.session_state.ollama_ready = ollama.is_available()
+if st.session_state.pending_navigation:
+    st.session_state.navigation = st.session_state.pending_navigation
+    st.session_state.pending_navigation = None
 
 with st.sidebar:
     st.markdown("## ◈ CommerceOS")
     st.caption("Autonomous AI Commerce Network")
-    page = st.radio("Workspace", ["Overview", "Buyer Request", "Seller Approval", "Direct Chat", "Seller Onboarding", "Verification"])
+    page = st.radio("Workspace", NAVIGATION, key="navigation", label_visibility="collapsed")
     st.divider()
-    st.caption("LOCAL AI")
-    if ollama_ready:
-        st.success("Gemma 3 4B online")
-    else:
-        st.warning("Gemma offline • fallback mode")
-    st.code("Ollama • localhost")
+    status_badge("Gemma 3 4B online" if st.session_state.ollama_ready else "Gemma offline", "success" if st.session_state.ollama_ready else "warning")
+    st.caption("Local Ollama inference · deterministic policy enforcement")
 
 if page == "Overview":
-    st.markdown('<div class="hero"><h1>Commerce command center</h1><p>Coordinate buyer intent, seller policies, negotiation, and agreement safety in one workspace.</p></div>', unsafe_allow_html=True)
-    cols = st.columns(4)
-    for col, value, label in zip(cols, ["02", "01", "00", "100%"], ["Seller agents", "Active request", "Blocked checkouts", "Policy enforcement"]):
-        col.metric(label, value)
-    st.subheader("Workflow health")
-    cols = st.columns(3)
-    cols[0].markdown('<div class="card"><span class="pill">READY</span><h3>Buyer Agent</h3><p class="muted">Natural-language intent extraction and compliant ranking.</p></div>', unsafe_allow_html=True)
-    cols[1].markdown('<div class="card"><span class="pill">READY</span><h3>Seller Agents</h3><p class="muted">Independent catalogs, pricing floors, and approval policies.</p></div>', unsafe_allow_html=True)
-    cols[2].markdown('<div class="card"><span class="pill">READY</span><h3>Agreement Guard</h3><p class="muted">Deterministic verification before simulated checkout.</p></div>', unsafe_allow_html=True)
-    st.subheader("Demo transaction")
-    st.info("Open Buyer Request to run the complete laptop example. The same workflow supports any product category with structured attributes.")
-
-elif page == "Buyer Request":
-    st.markdown('<div class="hero"><h1>Buyer request workspace</h1><p>Turn natural language into hard constraints, preferences, and a compliant negotiated offer.</p></div>', unsafe_allow_html=True)
-    text = st.text_area("What are you looking for?", "Find a gaming laptop with an RTX 3050 or better, at least 16 GB RAM, under ₹70,000. Prioritize ratings and reviews.", height=120)
-    if st.button("Run buyer and seller agents", type="primary", use_container_width=True):
-        with st.status("Running CommerceOS agents…", expanded=True) as run_status:
-            try:
-                st.write("Starting secure chat service…")
-                ensure_chat_server()
-                st.write("Buyer Agent is extracting requirements…")
-                buyer = BuyerAgent(llm=ollama if ollama_ready else None)
-                request = buyer.parse_request(text)
-                st.write("Supplier Agents are checking inventory and negotiating…")
-                sellers = [SellerAgent(profile, llm=ollama if ollama_ready else None) for profile in demo_sellers()]
-                products = {product.product_id: product for seller in sellers for product in seller.profile.products}
-                result = NegotiationEngine(buyer).run(request, sellers, products)
-                st.session_state.transaction_machine.transition(TransactionState.NEGOTIATING)
-                st.session_state.result = (request, result, products, buyer)
-                st.session_state.agent_chat_messages = []
-                st.session_state.direct_chat_messages = []
-                if result.chat_room_id and result.selected_offer:
-                    selected_profile = next(profile for profile in demo_sellers() if profile.seller_id == result.selected_offer.seller_id)
-                    try:
-                        create_chat_room(
-                            result.chat_room_id,
-                            buyer_context={
-                                "role": "buyer procurement agent",
-                                "request": request.model_dump(),
-                                "hard_constraints": request.hard_constraints,
-                                "budget_inr": request.max_budget_inr,
-                            },
-                            supplier_context={
-                                "role": "supplier agent",
-                                "supplier_id": selected_profile.seller_id,
-                                "supplier_name": selected_profile.display_name,
-                                "private_policies": selected_profile.policies[result.selected_offer.product_id].model_dump(),
-                                "product": products[result.selected_offer.product_id].model_dump(),
-                            },
-                        )
-                        result.direct_chat_room_id = f"{result.chat_room_id}-direct"
-                        create_chat_room(
-                            result.direct_chat_room_id,
-                            buyer_context={"role": "buyer", "request": request.model_dump(), "budget_inr": request.max_budget_inr},
-                            supplier_context={"role": "supplier human", "supplier_id": selected_profile.seller_id},
-                            agent_chat_enabled=False,
-                        )
-                    except ChatSocketError as exc:
-                        st.warning(f"Negotiation completed, but chat is unavailable: {exc}")
-                run_status.update(label="Negotiation complete", state="complete", expanded=False)
-            except (OllamaError, ValueError, RuntimeError) as exc:
-                run_status.update(label="Workflow failed", state="error", expanded=True)
-                st.error(f"CommerceOS could not complete the workflow: {exc}")
-    if st.session_state.result:
-        request, result, products, buyer = st.session_state.result
-        st.caption(f"Requirement extraction: **{buyer.last_parse_source}**")
-        if buyer.last_error:
-            st.warning(f"Gemma response was rejected, so deterministic fallback was used: {buyer.last_error}")
-        st.subheader("Buyer Agent interpretation")
-        a, b, c = st.columns(3)
-        a.metric("Category", request.product_category)
-        b.metric("Quantity", request.quantity)
-        c.metric("Maximum budget", f"₹{request.max_budget_inr:,}")
-        st.write("**Hard constraints:**", request.hard_constraints or "None extracted")
-        st.write("**Preferences:**", ", ".join(request.preferences) or "None")
-        st.subheader("Supplier offers")
-        st.subheader("Negotiation timeline")
-        for event in result.events:
-            st.write(f"• {event}")
-        if result.decision_trace:
-            with st.expander("Why this offer was selected"):
-                for item in result.decision_trace:
-                    st.write(f"✓ {item}")
-        if result.supplier_chat_request and result.supplier_chat_status == "pending":
-            st.subheader("Supplier direct-contact request")
-            st.info(result.supplier_chat_request)
-            allow, deny, message_agent = st.columns(3)
-            if allow.button("Allow dedicated buyer ↔ supplier chat", type="primary", use_container_width=True):
-                try:
-                    if not result.direct_chat_room_id:
-                        raise ChatSocketError("Dedicated direct-chat room is unavailable.")
-                    set_chat_permission(result.direct_chat_room_id, True)
-                    result.supplier_chat_status = "approved"
-                    st.session_state.result = (request, result, products, buyer)
-                    st.session_state.direct_chat_messages = []
-                    st.success("Permission granted. Open Direct Chat to begin.")
-                    st.rerun()
-                except ChatSocketError as exc:
-                    st.error(str(exc))
-            if deny.button("Reject chat request", use_container_width=True):
-                if result.direct_chat_room_id:
-                    set_chat_permission(result.direct_chat_room_id, False)
-                result.supplier_chat_status = "rejected"
-                st.session_state.result = (request, result, products, buyer)
-                st.rerun()
-            if message_agent.button("Message supplier agent", use_container_width=True):
-                st.session_state.agent_chat_open = True
-                st.rerun()
-        if result.chat_room_id:
-            if st.button("Open supplier-agent negotiation", use_container_width=True):
-                st.session_state.agent_chat_open = True
-            if st.session_state.agent_chat_open:
-                st.subheader("Private buyer ↔ supplier-agent chat")
-                st.caption("This is the agent negotiation thread. Human-to-human chat remains locked until direct contact is accepted.")
-                for item in st.session_state.agent_chat_messages:
-                    role_map = {"buyer-user": ("user", "🧑"), "supplier-agent": ("assistant", "🏪")}
-                    role, avatar = role_map.get(item["sender_role"], ("assistant", "⚙️"))
-                    with st.chat_message(role, avatar=avatar):
-                        st.write(item["message"])
-                agent_message = st.chat_input("Message the supplier agent…", key="buyer_agent_chat_input")
-                if agent_message:
-                    try:
-                        round_number = result.selected_offer.round_number if result.selected_offer else 1
-                        messages = send_chat_message(
-                            result.chat_room_id,
-                            "buyer-user",
-                            agent_message,
-                            round_number,
-                        )
-                        st.session_state.agent_chat_messages.extend(messages)
-                        st.session_state.chat_socket_status = "connected • WebSocket"
-                        st.rerun()
-                    except ChatSocketError as exc:
-                        st.error(str(exc))
-        for offer in result.offers:
-            product = products[offer.product_id]
-            with st.container(border=True):
-                a, b, c, d = st.columns(4)
-                a.write(f"**{offer.seller_id}**")
-                b.metric("Price", f"₹{offer.total_price_inr:,}")
-                c.metric("Rating", f"{product.rating} ★")
-                d.metric("Delivery", f"{offer.delivery_days} days")
-                if offer.requires_seller_approval:
-                    st.warning("Seller approval required")
-                else:
-                    st.success("Selected compliant offer" if offer == result.selected_offer else "Offer received")
-        if result.selected_offer:
-            if result.selected_offer.requires_seller_approval and result.selected_offer.seller_approval_status != "approved":
-                st.warning(
-                    f"Seller approval required for ₹{result.selected_offer.total_price_inr:,}. "
-                    "Open Seller Approval to review the negotiated terms."
-                )
-            else:
-                st.success(f"Offer approved: ₹{result.selected_offer.total_price_inr:,}. Open Verification to record and verify the agreement.")
-        else:
-            st.error(result.reason)
-
-elif page == "Seller Approval":
-    st.markdown('<div class="hero"><h1>Seller approval desk</h1><p>Human approval is required when an agent negotiates below the seller automatic approval floor.</p></div>', unsafe_allow_html=True)
-    if not st.session_state.result or not st.session_state.result[1].selected_offer:
-        st.info("Run a buyer transaction first. Pending deals will appear here.")
-    else:
-        request, result, products, buyer = st.session_state.result
-        offer = result.selected_offer
-        seller_profile = next(profile for profile in demo_sellers() if profile.seller_id == offer.seller_id)
-        product = products[offer.product_id]
-        if not offer.requires_seller_approval or offer.seller_approval_status == "approved":
-            st.success("No pending seller approval. This offer is already authorized.")
-        else:
-            policy = seller_profile.policies[offer.product_id]
-            a, b, c, d = st.columns(4)
-            a.metric("Negotiated price", f"₹{offer.unit_price_inr:,}")
-            b.metric("Listed price", f"₹{product.listed_price_inr:,}")
-            c.metric("Hard minimum", f"₹{policy.minimum_price_inr:,}")
-            d.metric("Approval floor", f"₹{policy.automatic_approval_floor_inr:,}")
-            st.warning(
-                f"Approval required: the agent negotiated ₹{offer.unit_price_inr:,}, "
-                f"below the automatic floor of ₹{policy.automatic_approval_floor_inr:,} "
-                f"but above the hard minimum."
-            )
-            st.write(f"**Product:** {product.name}  •  **Quantity:** {offer.quantity}  •  **Delivery:** {offer.delivery_days} days")
-            st.write(f"**Agent rationale:** {offer.terms.get('negotiation_note', 'Buyer requested a better trade-off.')}")
-            st.info("Seller approval is handled here. Direct buyer ↔ seller chat requests and approval appear only in Buyer Request.")
-            approve, reject, counter = st.columns(3)
-            if approve.button("Approve deal", type="primary", use_container_width=True):
-                result.selected_offer = offer.model_copy(update={"seller_approval_status": "approved"})
-                result.events.append("Seller human approval granted. Agreement may proceed to buyer authorization.")
-                result.messages.append(NegotiationMessage(
-                    sender_id="seller-human",
-                    sender_role="seller_human",
-                    message="I approve the negotiated price and delivery terms. The agreement may proceed.",
-                    round_number=offer.round_number,
-                    message_type="approval_response",
-                    related_offer_id=offer.offer_id,
-                )
-                )
-                st.session_state.result = (request, result, products, buyer)
-                st.rerun()
-            if reject.button("Discuss instead", use_container_width=True):
-                st.session_state.approval_chat_open = True
-                st.rerun()
-            with counter:
-                counter_price = st.number_input("Counter price (₹)", min_value=policy.minimum_price_inr, value=offer.unit_price_inr + 1000, step=500)
-                if st.button("Send counteroffer", use_container_width=True):
-                    seller = SellerAgent(seller_profile, llm=ollama if ollama_ready else None)
-                    response = seller.respond_to_counteroffer(request, product, counter_price, offer.round_number + 1)
-                    result.selected_offer = response
-                    result.offers.append(response)
-                    result.events.append(f"Seller sent a human counteroffer at ₹{counter_price:,}/unit.")
-                    result.messages.append(NegotiationMessage(
-                        sender_id="seller-human",
-                        sender_role="seller_human",
-                        message=f"Human counteroffer: ₹{counter_price:,}/unit. Please confirm this revised term.",
-                        round_number=response.round_number,
-                        message_type="counteroffer",
-                        related_offer_id=response.offer_id,
-                    )
-                    )
-                    st.session_state.result = (request, result, products, buyer)
-                    st.rerun()
-
-elif page == "Direct Chat":
-    st.markdown('<div class="hero"><h1>Dedicated buyer ↔ supplier chat</h1><p>A private, permissioned conversation powered by Gemma with isolated room history.</p></div>', unsafe_allow_html=True)
-    if not st.session_state.result:
-        st.info("Run a buyer transaction first.")
-    else:
-        request, result, products, buyer = st.session_state.result
-        if result.supplier_chat_status != "approved" or not result.direct_chat_room_id:
-            st.warning("The buyer has not approved a supplier direct-contact request.")
-        else:
-            offer = result.selected_offer
-            try:
-                check_chat_connection(result.direct_chat_room_id, "seller-human")
-                st.session_state.chat_socket_status = "connected • WebSocket"
-            except ChatSocketError as exc:
-                st.session_state.chat_socket_status = f"offline • {exc}"
-            st.success(f"WebSocket room: {result.direct_chat_room_id} • {st.session_state.chat_socket_status}")
-            for message in st.session_state.direct_chat_messages:
-                role_map = {
-                    "seller-human": ("seller_human", "👤"),
-                    "buyer-agent": ("buyer_agent", "🛒"),
-                    "supplier-agent": ("seller_agent", "🏪"),
-                    "buyer-human": ("buyer_human", "🧑"),
-                }
-                role, avatar = role_map.get(message["sender_role"], ("system", "⚙️"))
-                with st.chat_message(role, avatar=avatar):
-                    st.caption(message["sender_id"])
-                    st.write(message["message"])
-                    if message.get("proposal"):
-                        st.caption(f"Unapplied proposal: {message['proposal']}")
-            message = st.chat_input("Write to the supplier/buyer agent…", key="direct_chat_input")
-            if message:
-                try:
-                    socket_messages = send_chat_message(
-                        room_id=result.direct_chat_room_id,
-                        role="seller-human",
-                        message=message,
-                        round_number=offer.round_number + 1,
-                        context={"unit_price_inr": offer.unit_price_inr, "delivery_days": offer.delivery_days, "budget_inr": request.max_budget_inr},
-                    )
-                    st.session_state.direct_chat_messages.extend(socket_messages)
-                    st.session_state.chat_socket_status = "connected • WebSocket"
-                    st.rerun()
-                except ChatSocketError as exc:
-                    st.error(str(exc))
-            st.divider()
-            st.caption("Agent-to-agent test channel")
-            agent_prompt = st.text_input("Send a message from the Supplier Agent", key="supplier_agent_prompt")
-            if st.button("Run supplier ↔ buyer agent turn"):
-                if not agent_prompt.strip():
-                    st.warning("Enter a message first.")
-                else:
-                    try:
-                        socket_messages = exchange_agent_message(
-                            room_id=result.chat_room_id,
-                            sender_role="supplier-agent",
-                            message=agent_prompt,
-                            round_number=offer.round_number + 1,
-                        )
-                        st.session_state.direct_chat_messages.extend(socket_messages)
-                        st.session_state.chat_socket_status = "connected • WebSocket"
-                        st.rerun()
-                    except ChatSocketError as exc:
-                        st.error(str(exc))
-            pending_proposals = [item for item in st.session_state.direct_chat_messages if item.get("proposal")]
-            if pending_proposals:
-                st.subheader("Validated chat proposals")
-                selected_profile = next(profile for profile in demo_sellers() if profile.seller_id == offer.seller_id)
-                policy = selected_profile.policies[offer.product_id]
-                product = products[offer.product_id]
-                for proposal_message in pending_proposals:
-                    valid, errors = validate_chat_proposal(
-                        proposal_message["proposal"], request, offer, product, policy
-                    )
-                    if valid:
-                        st.success(f"Proposal is policy-valid but not accepted: {proposal_message['proposal']}")
-                        if st.button("Apply proposal for approval review", key=f"apply-{id(proposal_message)}"):
-                            proposal = proposal_message["proposal"]
-                            updated = offer.model_copy(update={
-                                "unit_price_inr": proposal.get("unit_price_inr", offer.unit_price_inr),
-                                "quantity": proposal.get("quantity", offer.quantity),
-                                "total_price_inr": proposal.get("unit_price_inr", offer.unit_price_inr) * proposal.get("quantity", offer.quantity),
-                                "delivery_days": proposal.get("delivery_days", offer.delivery_days),
-                                "round_number": offer.round_number + 1,
-                                "requires_seller_approval": True,
-                                "seller_approval_status": "pending",
-                            })
-                            result.selected_offer = updated
-                            result.offers.append(updated)
-                            result.events.append("A chat proposal passed deterministic validation and entered approval review.")
-                            st.session_state.result = (request, result, products, buyer)
-                            st.rerun()
-                    else:
-                        st.error(f"Proposal rejected by policy: {', '.join(errors)}")
-
-elif page == "Seller Onboarding":
-    st.markdown('<div class="hero"><h1>Seller agent onboarding</h1><p>Configure a product, commercial limits, and an approval-safe negotiation policy.</p></div>', unsafe_allow_html=True)
-    left, right = st.columns([1.2, 1])
-    with left:
-        name = st.text_input("Product name", "Professional Wireless Headphones")
-        listed = st.number_input("Listed price (₹)", min_value=1, value=6500, step=100)
-        minimum = st.number_input("Minimum acceptable price (₹)", min_value=1, value=6000, step=100)
-        floor = st.number_input("Automatic approval floor (₹)", min_value=1, value=6200, step=100)
-        instructions = st.text_area("Seller instructions", "Never sell below the minimum price. Negotiate politely. Confirm stock before accepting an order.")
-    with right:
-        st.subheader("Live policy preview")
-        st.markdown(f'<div class="card"><h3>{name}</h3><p>Listed price: <b>₹{listed:,}</b></p><p>Automatic approval floor: <b>₹{floor:,}</b></p><p>Hard minimum: <b>₹{minimum:,}</b></p><hr><p class="muted">{instructions}</p></div>', unsafe_allow_html=True)
-        if minimum > floor or floor > listed:
-            st.error("Invalid policy: minimum price ≤ automatic approval floor ≤ listed price is required.")
-        else:
-            st.success("Policy is internally consistent.")
-
+    render_overview()
+elif page == "Buyer Workspace":
+    render_buyer_workspace(ollama, st.session_state.ollama_ready)
+elif page == "Agent Negotiations":
+    render_agent_negotiations()
+elif page == "Seller Portal":
+    render_seller_portal(ollama, st.session_state.ollama_ready)
+elif page == "Approvals":
+    render_approvals()
+elif page == "Conversations":
+    render_conversations()
+elif page == "Agreements & Verification":
+    render_agreements()
 else:
-    st.markdown('<div class="hero"><h1>Agreement verification guard</h1><p>Checkout is allowed only when immutable accepted terms still match current supplier terms.</p></div>', unsafe_allow_html=True)
-    if not st.session_state.result or not st.session_state.result[1].selected_offer:
-        st.info("Run a buyer transaction first.")
-    else:
-        request, result, products, _buyer = st.session_state.result
-        offer = result.selected_offer
-        if offer.requires_seller_approval and offer.seller_approval_status != "approved":
-            st.error("Agreement cannot be recorded: seller approval is still pending.")
-        else:
-            agreement = record_agreement(offer)
-            st.subheader("Accepted agreement")
-            integrity = verify_integrity(agreement)
-            st.caption(f"Agreement v{agreement.version} • SHA-256: `{agreement.integrity.sha256[:16]}...`")
-            st.json(agreement.model_dump())
-            st.success(
-                "Agreement integrity verified — buyer authorization is still required before simulated checkout."
-                if integrity.passed else "Agreement integrity check failed."
-            )
-            if st.button("Authorize simulated checkout", type="primary"):
-                st.success("Simulated checkout authorized. No real payment was processed.")
-        st.divider()
-        st.subheader("Changed-price demonstration")
-        changed = offer.model_copy(update={"unit_price_inr": offer.unit_price_inr + 2000, "total_price_inr": (offer.unit_price_inr + 2000) * offer.quantity})
-        if not (offer.requires_seller_approval and offer.seller_approval_status != "approved"):
-            verification = verify_agreement(agreement, changed)
-            st.error("Checkout blocked: " + "; ".join(verification.mismatches))
-            st.subheader("Autonomous recovery")
-            fallback = next((candidate for candidate in result.offers if candidate.seller_id != offer.seller_id), None)
-            if st.button("Block payment and recover with next supplier", type="primary"):
-                recovery = RecoveryManager()
-                recovered, recovered_agreement = recovery.detect_and_recover(agreement, changed, fallback)
-                st.session_state.transaction_machine.transition(TransactionState.PAYMENT_BLOCKED)
-                if recovered and recovered_agreement:
-                    st.session_state.transaction_machine.transition(TransactionState.RECOVERED)
-                    st.success("Tampering detected. Payment stayed blocked and a new agreement version was created.")
-                    for action in recovery.actions:
-                        st.write(f"• {action}")
-                    st.json(recovered_agreement.model_dump())
+    render_history()
