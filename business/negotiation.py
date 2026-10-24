@@ -75,6 +75,8 @@ class NegotiationEngine:
             return NegotiationResult(offers=offers, events=events, decision_trace=decision_trace, messages=messages, reason="No compliant offer is available.")
         selected = ranked[0]
         selected_product = products[selected.product_id]
+        selected_seller = next(seller for seller in sellers if seller.profile.seller_id == selected.seller_id)
+        supplier_chat_request = selected_seller.request_direct_chat(request, selected_product, selected)
         decision_trace.append(
             f"Selected by weighted score: rating 30%, reviews 20%, price 35%, delivery 15%."
         )
@@ -84,7 +86,7 @@ class NegotiationEngine:
         )
         tradeoff = self.buyer.propose_tradeoff(request, selected, selected_product)
         if tradeoff and selected.round_number < self.max_rounds:
-            seller = next(seller for seller in sellers if seller.profile.seller_id == selected.seller_id)
+            seller = selected_seller
             counter_price = tradeoff["unit_price_inr"]
             events.append(
                 f"Buyer Agent countered at ₹{counter_price:,}/unit and requested {tradeoff['delivery_days']} day delivery "
@@ -173,4 +175,7 @@ class NegotiationEngine:
             decision_trace=decision_trace,
             messages=messages,
             reason="Best compliant offer selected.",
+            supplier_chat_request=supplier_chat_request,
+            supplier_chat_status="pending" if supplier_chat_request else "not_requested",
+            chat_room_id=selected.offer_id if supplier_chat_request else None,
         )

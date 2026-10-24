@@ -6,6 +6,7 @@ from data import demo_sellers
 from business.negotiation import NegotiationEngine
 from business.recovery import RecoveryManager
 from business.trust import verify_integrity
+from business.chat_policy import validate_chat_proposal
 
 
 def test_seller_never_accepts_below_hard_floor():
@@ -89,6 +90,32 @@ def test_recovery_creates_new_agreement_version_after_tampering():
     assert replacement is not None
     assert replacement.version == 2
     assert replacement.seller_id != agreement.seller_id
+
+
+def test_chat_proposal_is_validated_before_policy_state_can_change():
+    seller = SellerAgent(demo_sellers()[0])
+    product = seller.profile.products[0]
+    request = BuyerAgent().parse_request("gaming laptop under ₹70000")
+    offer = seller.create_offer(request, product)
+    policy = seller.profile.policies[product.product_id]
+    valid, errors = validate_chat_proposal(
+        {"unit_price_inr": 65000, "quantity": 1, "delivery_days": 3},
+        request,
+        offer,
+        product,
+        policy,
+    )
+    assert valid
+    assert errors == []
+    invalid, errors = validate_chat_proposal(
+        {"unit_price_inr": 1000, "quantity": 1, "delivery_days": 3},
+        request,
+        offer,
+        product,
+        policy,
+    )
+    assert not invalid
+    assert "price is below the seller hard minimum" in errors
 
 
 def test_negotiation_produces_structured_agent_chat():

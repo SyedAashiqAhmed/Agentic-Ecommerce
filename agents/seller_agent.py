@@ -20,6 +20,35 @@ class SellerAgent:
             return None
         return self._build_offer(product, request.quantity, product.listed_price_inr, 1, policy)
 
+    def request_direct_chat(self, request: BuyerRequest, product: Product, offer: Offer) -> str | None:
+        if not self.llm:
+            return None
+        policy = self.profile.policies[product.product_id]
+        try:
+            data = self.llm.generate_json(
+                (
+                    "You are an independent supplier agent. Decide whether direct buyer contact "
+                    "would clarify a real commercial issue. Return JSON with request_contact (boolean), "
+                    "reason (string), and topics (array of strings). Do not request contact merely to chat."
+                ),
+                (
+                    f"Supplier: {self.profile.display_name}. Product: {product.name}. "
+                    f"Offer: {offer.unit_price_inr} INR/unit, {offer.delivery_days} days. "
+                    f"Hard minimum: {policy.minimum_price_inr} INR. "
+                    f"Seller instructions: {policy.seller_instructions}. "
+                    f"Buyer request: {request.original_text}"
+                ),
+            )
+            if data.get("request_contact") is True:
+                reason = str(data.get("reason", "")).strip()
+                topics = data.get("topics", [])
+                topic_text = ", ".join(str(topic) for topic in topics[:3])
+                if reason:
+                    return f"{reason}" + (f" Topics to clarify: {topic_text}." if topic_text else "")
+        except (OllamaError, ValueError, TypeError, KeyError):
+            return None
+        return None
+
     def respond_to_counteroffer(
         self,
         request: BuyerRequest,

@@ -122,6 +122,7 @@ class NegotiationMessage(BaseModel):
         "approval_response", "policy_notice", "selection", "system",
     ] = "system"
     related_offer_id: str | None = None
+    proposal: dict[str, Any] | None = None
 
 
 class Agreement(BaseModel):
@@ -158,3 +159,7 @@ class NegotiationResult(BaseModel):
     messages: list[NegotiationMessage] = Field(default_factory=list)
     reason: str = ""
     recovery_actions: list[str] = Field(default_factory=list)
+    supplier_chat_request: str | None = None
+    supplier_chat_status: Literal["not_requested", "pending", "approved", "rejected"] = "not_requested"
+    chat_room_id: str | None = None
+    direct_chat_room_id: str | None = None

@@ -1,8 +1,24 @@
+import subprocess
+import sys
+import time
+import socket
+from pathlib import Path
+
+import requests
 import streamlit as st
 
 from agents.buyer_agent import BuyerAgent
 from agents.seller_agent import SellerAgent
-from chat_client import ChatSocketError, send_seller_message
+from business.chat_policy import validate_chat_proposal
+from chat_client import (
+    ChatSocketError,
+    check_chat_connection,
+    create_chat_room,
+    exchange_agent_message,
+    send_seller_message,
+    set_chat_permission,
+    send_chat_message,
+)
 from business.agreement import record_agreement
 from business.negotiation import NegotiationEngine
 from business.recovery import RecoveryManager
@@ -14,6 +30,70 @@ from llm.ollama_client import OllamaClient, OllamaError
 from schemas import NegotiationMessage
 
 st.set_page_config(page_title="CommerceOS", page_icon="◈", layout="wide", initial_sidebar_state="expanded")
+
+
+CHAT_HEALTH_URL = "http://127.0.0.1:8765/health"
+CHAT_HOST = "127.0.0.1"
+CHAT_PORT = 8765
+
+
+def _chat_health(timeout: float = 6) -> str | None:
+    try:
+        response = requests.get(CHAT_HEALTH_URL, timeout=timeout)
+        response.raise_for_status()
+        payload = response.json()
+        if payload.get("status") == "ok":
+            return None
+        return f"unexpected health response: {payload}"
+    except (requests.RequestException, ValueError, TypeError) as exc:
+        return str(exc)
+
+
+def _chat_port_open() -> bool:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as probe:
+        probe.settimeout(0.5)
+        return probe.connect_ex((CHAT_HOST, CHAT_PORT)) == 0
+
+
+def ensure_chat_server() -> None:
+    if _chat_health() is None:
+        return
+    if _chat_port_open():
+        for _ in range(10):
+            if _chat_health() is None:
+                return
+            time.sleep(0.5)
+        raise ChatSocketError(
+            "Port 8765 is already occupied, but the existing process is not answering "
+            "the CommerceOS health check. Stop the stale process and restart Streamlit."
+        )
+    process = st.session_state.get("chat_server_process")
+    if process is None or process.poll() is not None:
+        log_dir = Path(__file__).parent
+        process = subprocess.Popen(
+            [sys.executable, str(log_dir / "chat_server.py")],
+            cwd=Path(__file__).parent,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        st.session_state.chat_server_process = process
+    for _ in range(20):
+        health_error = _chat_health()
+        if health_error is None:
+            return
+        if process.poll() is not None:
+            stderr = (process.stderr.read() if process.stderr else "").strip()
+            if _chat_health() is None:
+                return
+            detail = stderr or health_error
+            raise ChatSocketError(f"Chat service exited during startup: {detail}")
+        time.sleep(0.5)
+    health_error = _chat_health()
+    raise ChatSocketError(
+        "Chat service did not become healthy on port 8765. "
+        f"Health check: {health_error or 'unknown error'}"
+    )
 
 st.markdown(
     """
@@ -59,13 +139,19 @@ if "approval_chat_open" not in st.session_state:
     st.session_state.approval_chat_open = False
 if "chat_socket_status" not in st.session_state:
     st.session_state.chat_socket_status = "not connected"
+if "direct_chat_messages" not in st.session_state:
+    st.session_state.direct_chat_messages = []
+if "agent_chat_messages" not in st.session_state:
+    st.session_state.agent_chat_messages = []
+if "agent_chat_open" not in st.session_state:
+    st.session_state.agent_chat_open = False
 ollama = OllamaClient()
 ollama_ready = ollama.is_available()
 
 with st.sidebar:
     st.markdown("## ◈ CommerceOS")
     st.caption("Autonomous AI Commerce Network")
-    page = st.radio("Workspace", ["Overview", "Buyer Request", "Seller Approval", "Seller Onboarding", "Verification"])
+    page = st.radio("Workspace", ["Overview", "Buyer Request", "Seller Approval", "Direct Chat", "Seller Onboarding", "Verification"])
     st.divider()
     st.caption("LOCAL AI")
     if ollama_ready:
@@ -91,13 +177,53 @@ elif page == "Buyer Request":
     st.markdown('<div class="hero"><h1>Buyer request workspace</h1><p>Turn natural language into hard constraints, preferences, and a compliant negotiated offer.</p></div>', unsafe_allow_html=True)
     text = st.text_area("What are you looking for?", "Find a gaming laptop with an RTX 3050 or better, at least 16 GB RAM, under ₹70,000. Prioritize ratings and reviews.", height=120)
     if st.button("Run buyer and seller agents", type="primary", use_container_width=True):
-        buyer = BuyerAgent(llm=ollama if ollama_ready else None)
-        request = buyer.parse_request(text)
-        sellers = [SellerAgent(profile, llm=ollama if ollama_ready else None) for profile in demo_sellers()]
-        products = {product.product_id: product for seller in sellers for product in seller.profile.products}
-        result = NegotiationEngine(buyer).run(request, sellers, products)
-        st.session_state.transaction_machine.transition(TransactionState.NEGOTIATING)
-        st.session_state.result = (request, result, products, buyer)
+        with st.status("Running CommerceOS agents…", expanded=True) as run_status:
+            try:
+                st.write("Starting secure chat service…")
+                ensure_chat_server()
+                st.write("Buyer Agent is extracting requirements…")
+                buyer = BuyerAgent(llm=ollama if ollama_ready else None)
+                request = buyer.parse_request(text)
+                st.write("Supplier Agents are checking inventory and negotiating…")
+                sellers = [SellerAgent(profile, llm=ollama if ollama_ready else None) for profile in demo_sellers()]
+                products = {product.product_id: product for seller in sellers for product in seller.profile.products}
+                result = NegotiationEngine(buyer).run(request, sellers, products)
+                st.session_state.transaction_machine.transition(TransactionState.NEGOTIATING)
+                st.session_state.result = (request, result, products, buyer)
+                st.session_state.agent_chat_messages = []
+                st.session_state.direct_chat_messages = []
+                if result.chat_room_id and result.selected_offer:
+                    selected_profile = next(profile for profile in demo_sellers() if profile.seller_id == result.selected_offer.seller_id)
+                    try:
+                        create_chat_room(
+                            result.chat_room_id,
+                            buyer_context={
+                                "role": "buyer procurement agent",
+                                "request": request.model_dump(),
+                                "hard_constraints": request.hard_constraints,
+                                "budget_inr": request.max_budget_inr,
+                            },
+                            supplier_context={
+                                "role": "supplier agent",
+                                "supplier_id": selected_profile.seller_id,
+                                "supplier_name": selected_profile.display_name,
+                                "private_policies": selected_profile.policies[result.selected_offer.product_id].model_dump(),
+                                "product": products[result.selected_offer.product_id].model_dump(),
+                            },
+                        )
+                        result.direct_chat_room_id = f"{result.chat_room_id}-direct"
+                        create_chat_room(
+                            result.direct_chat_room_id,
+                            buyer_context={"role": "buyer", "request": request.model_dump(), "budget_inr": request.max_budget_inr},
+                            supplier_context={"role": "supplier human", "supplier_id": selected_profile.seller_id},
+                            agent_chat_enabled=False,
+                        )
+                    except ChatSocketError as exc:
+                        st.warning(f"Negotiation completed, but chat is unavailable: {exc}")
+                run_status.update(label="Negotiation complete", state="complete", expanded=False)
+            except (OllamaError, ValueError, RuntimeError) as exc:
+                run_status.update(label="Workflow failed", state="error", expanded=True)
+                st.error(f"CommerceOS could not complete the workflow: {exc}")
     if st.session_state.result:
         request, result, products, buyer = st.session_state.result
         st.caption(f"Requirement extraction: **{buyer.last_parse_source}**")
@@ -118,12 +244,57 @@ elif page == "Buyer Request":
             with st.expander("Why this offer was selected"):
                 for item in result.decision_trace:
                     st.write(f"✓ {item}")
-        st.subheader("Agent negotiation chat")
-        for message in result.messages:
-            avatar = {"buyer_agent": "🛒", "seller_agent": "🏪", "seller_human": "👤", "system": "⚙️"}[message.sender_role]
-            with st.chat_message(message.sender_role, avatar=avatar):
-                st.caption(f"{message.sender_id} • Round {message.round_number} • {message.message_type.replace('_', ' ').title()}")
-                st.write(message.message)
+        if result.supplier_chat_request and result.supplier_chat_status == "pending":
+            st.subheader("Supplier direct-contact request")
+            st.info(result.supplier_chat_request)
+            allow, deny, message_agent = st.columns(3)
+            if allow.button("Allow dedicated buyer ↔ supplier chat", type="primary", use_container_width=True):
+                try:
+                    if not result.direct_chat_room_id:
+                        raise ChatSocketError("Dedicated direct-chat room is unavailable.")
+                    set_chat_permission(result.direct_chat_room_id, True)
+                    result.supplier_chat_status = "approved"
+                    st.session_state.result = (request, result, products, buyer)
+                    st.session_state.direct_chat_messages = []
+                    st.success("Permission granted. Open Direct Chat to begin.")
+                    st.rerun()
+                except ChatSocketError as exc:
+                    st.error(str(exc))
+            if deny.button("Reject chat request", use_container_width=True):
+                if result.direct_chat_room_id:
+                    set_chat_permission(result.direct_chat_room_id, False)
+                result.supplier_chat_status = "rejected"
+                st.session_state.result = (request, result, products, buyer)
+                st.rerun()
+            if message_agent.button("Message supplier agent", use_container_width=True):
+                st.session_state.agent_chat_open = True
+                st.rerun()
+        if result.chat_room_id:
+            if st.button("Open supplier-agent negotiation", use_container_width=True):
+                st.session_state.agent_chat_open = True
+            if st.session_state.agent_chat_open:
+                st.subheader("Private buyer ↔ supplier-agent chat")
+                st.caption("This is the agent negotiation thread. Human-to-human chat remains locked until direct contact is accepted.")
+                for item in st.session_state.agent_chat_messages:
+                    role_map = {"buyer-user": ("user", "🧑"), "supplier-agent": ("assistant", "🏪")}
+                    role, avatar = role_map.get(item["sender_role"], ("assistant", "⚙️"))
+                    with st.chat_message(role, avatar=avatar):
+                        st.write(item["message"])
+                agent_message = st.chat_input("Message the supplier agent…", key="buyer_agent_chat_input")
+                if agent_message:
+                    try:
+                        round_number = result.selected_offer.round_number if result.selected_offer else 1
+                        messages = send_chat_message(
+                            result.chat_room_id,
+                            "buyer-user",
+                            agent_message,
+                            round_number,
+                        )
+                        st.session_state.agent_chat_messages.extend(messages)
+                        st.session_state.chat_socket_status = "connected • WebSocket"
+                        st.rerun()
+                    except ChatSocketError as exc:
+                        st.error(str(exc))
         for offer in result.offers:
             product = products[offer.product_id]
             with st.container(border=True):
@@ -172,52 +343,7 @@ elif page == "Seller Approval":
             )
             st.write(f"**Product:** {product.name}  •  **Quantity:** {offer.quantity}  •  **Delivery:** {offer.delivery_days} days")
             st.write(f"**Agent rationale:** {offer.terms.get('negotiation_note', 'Buyer requested a better trade-off.')}")
-            if st.button("Open buyer ↔ seller negotiation chat", type="primary", use_container_width=True):
-                st.session_state.approval_chat_open = True
-                st.rerun()
-            if st.session_state.approval_chat_open:
-                st.subheader("Buyer ↔ seller live negotiation")
-                st.caption(
-                    f"Socket status: **{st.session_state.chat_socket_status}**. "
-                    "Discuss terms before approval. Payment and agreement recording remain blocked until explicit approval."
-                )
-                for message in result.messages:
-                    if message.sender_role in {"buyer_agent", "seller_agent", "seller_human"}:
-                        avatar = {"buyer_agent": "🛒", "seller_agent": "🏪", "seller_human": "👤"}[message.sender_role]
-                        with st.chat_message(message.sender_role, avatar=avatar):
-                            st.caption(f"{message.sender_id} • Round {message.round_number}")
-                            st.write(message.message)
-                seller_message = st.chat_input(
-                    "Message the Buyer Agent about price, delivery, warranty, or approval…",
-                    key="approval_chat_input",
-                )
-                if seller_message:
-                    try:
-                        socket_messages = send_seller_message(
-                            room_id=offer.offer_id,
-                            message=seller_message,
-                            round_number=offer.round_number + 1,
-                            context={
-                                "unit_price_inr": offer.unit_price_inr,
-                                "delivery_days": offer.delivery_days,
-                                "budget_inr": request.max_budget_inr,
-                            },
-                        )
-                        for socket_message in socket_messages:
-                            result.messages.append(NegotiationMessage(
-                                sender_id=socket_message["sender_id"],
-                                sender_role="seller_human" if socket_message["sender_role"] == "seller-human" else "buyer_agent",
-                                message=socket_message["message"],
-                                round_number=socket_message["round_number"],
-                                message_type="request" if socket_message["sender_role"] == "seller-human" else "approval_response",
-                                related_offer_id=offer.offer_id,
-                            ))
-                        st.session_state.chat_socket_status = "connected • WebSocket"
-                    except ChatSocketError as exc:
-                        st.error(str(exc))
-                        st.session_state.chat_socket_status = "offline"
-                    st.session_state.result = (request, result, products, buyer)
-                    st.rerun()
+            st.info("Seller approval is handled here. Direct buyer ↔ seller chat requests and approval appear only in Buyer Request.")
             approve, reject, counter = st.columns(3)
             if approve.button("Approve deal", type="primary", use_container_width=True):
                 result.selected_offer = offer.model_copy(update={"seller_approval_status": "approved"})
@@ -235,19 +361,6 @@ elif page == "Seller Approval":
                 st.rerun()
             if reject.button("Discuss instead", use_container_width=True):
                 st.session_state.approval_chat_open = True
-                st.rerun()
-                result.messages.append(NegotiationMessage(
-                    sender_id="seller-human",
-                    sender_role="seller_human",
-                    message="I reject this negotiated offer. The deal cannot proceed.",
-                    round_number=offer.round_number,
-                    message_type="approval_response",
-                    related_offer_id=offer.offer_id,
-                )
-                )
-                result.selected_offer = None
-                result.reason = "Seller rejected the negotiated offer."
-                st.session_state.result = (request, result, products, buyer)
                 st.rerun()
             with counter:
                 counter_price = st.number_input("Counter price (₹)", min_value=policy.minimum_price_inr, value=offer.unit_price_inr + 1000, step=500)
@@ -268,6 +381,100 @@ elif page == "Seller Approval":
                     )
                     st.session_state.result = (request, result, products, buyer)
                     st.rerun()
+
+elif page == "Direct Chat":
+    st.markdown('<div class="hero"><h1>Dedicated buyer ↔ supplier chat</h1><p>A private, permissioned conversation powered by Gemma with isolated room history.</p></div>', unsafe_allow_html=True)
+    if not st.session_state.result:
+        st.info("Run a buyer transaction first.")
+    else:
+        request, result, products, buyer = st.session_state.result
+        if result.supplier_chat_status != "approved" or not result.direct_chat_room_id:
+            st.warning("The buyer has not approved a supplier direct-contact request.")
+        else:
+            offer = result.selected_offer
+            try:
+                check_chat_connection(result.direct_chat_room_id, "seller-human")
+                st.session_state.chat_socket_status = "connected • WebSocket"
+            except ChatSocketError as exc:
+                st.session_state.chat_socket_status = f"offline • {exc}"
+            st.success(f"WebSocket room: {result.direct_chat_room_id} • {st.session_state.chat_socket_status}")
+            for message in st.session_state.direct_chat_messages:
+                role_map = {
+                    "seller-human": ("seller_human", "👤"),
+                    "buyer-agent": ("buyer_agent", "🛒"),
+                    "supplier-agent": ("seller_agent", "🏪"),
+                    "buyer-human": ("buyer_human", "🧑"),
+                }
+                role, avatar = role_map.get(message["sender_role"], ("system", "⚙️"))
+                with st.chat_message(role, avatar=avatar):
+                    st.caption(message["sender_id"])
+                    st.write(message["message"])
+                    if message.get("proposal"):
+                        st.caption(f"Unapplied proposal: {message['proposal']}")
+            message = st.chat_input("Write to the supplier/buyer agent…", key="direct_chat_input")
+            if message:
+                try:
+                    socket_messages = send_chat_message(
+                        room_id=result.direct_chat_room_id,
+                        role="seller-human",
+                        message=message,
+                        round_number=offer.round_number + 1,
+                        context={"unit_price_inr": offer.unit_price_inr, "delivery_days": offer.delivery_days, "budget_inr": request.max_budget_inr},
+                    )
+                    st.session_state.direct_chat_messages.extend(socket_messages)
+                    st.session_state.chat_socket_status = "connected • WebSocket"
+                    st.rerun()
+                except ChatSocketError as exc:
+                    st.error(str(exc))
+            st.divider()
+            st.caption("Agent-to-agent test channel")
+            agent_prompt = st.text_input("Send a message from the Supplier Agent", key="supplier_agent_prompt")
+            if st.button("Run supplier ↔ buyer agent turn"):
+                if not agent_prompt.strip():
+                    st.warning("Enter a message first.")
+                else:
+                    try:
+                        socket_messages = exchange_agent_message(
+                            room_id=result.chat_room_id,
+                            sender_role="supplier-agent",
+                            message=agent_prompt,
+                            round_number=offer.round_number + 1,
+                        )
+                        st.session_state.direct_chat_messages.extend(socket_messages)
+                        st.session_state.chat_socket_status = "connected • WebSocket"
+                        st.rerun()
+                    except ChatSocketError as exc:
+                        st.error(str(exc))
+            pending_proposals = [item for item in st.session_state.direct_chat_messages if item.get("proposal")]
+            if pending_proposals:
+                st.subheader("Validated chat proposals")
+                selected_profile = next(profile for profile in demo_sellers() if profile.seller_id == offer.seller_id)
+                policy = selected_profile.policies[offer.product_id]
+                product = products[offer.product_id]
+                for proposal_message in pending_proposals:
+                    valid, errors = validate_chat_proposal(
+                        proposal_message["proposal"], request, offer, product, policy
+                    )
+                    if valid:
+                        st.success(f"Proposal is policy-valid but not accepted: {proposal_message['proposal']}")
+                        if st.button("Apply proposal for approval review", key=f"apply-{id(proposal_message)}"):
+                            proposal = proposal_message["proposal"]
+                            updated = offer.model_copy(update={
+                                "unit_price_inr": proposal.get("unit_price_inr", offer.unit_price_inr),
+                                "quantity": proposal.get("quantity", offer.quantity),
+                                "total_price_inr": proposal.get("unit_price_inr", offer.unit_price_inr) * proposal.get("quantity", offer.quantity),
+                                "delivery_days": proposal.get("delivery_days", offer.delivery_days),
+                                "round_number": offer.round_number + 1,
+                                "requires_seller_approval": True,
+                                "seller_approval_status": "pending",
+                            })
+                            result.selected_offer = updated
+                            result.offers.append(updated)
+                            result.events.append("A chat proposal passed deterministic validation and entered approval review.")
+                            st.session_state.result = (request, result, products, buyer)
+                            st.rerun()
+                    else:
+                        st.error(f"Proposal rejected by policy: {', '.join(errors)}")
 
 elif page == "Seller Onboarding":
     st.markdown('<div class="hero"><h1>Seller agent onboarding</h1><p>Configure a product, commercial limits, and an approval-safe negotiation policy.</p></div>', unsafe_allow_html=True)
