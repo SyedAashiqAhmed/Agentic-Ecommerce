@@ -38,6 +38,50 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+st.markdown(
+    """
+    <style>
+    :root { color-scheme: light; }
+    .stApp, [data-testid="stAppViewContainer"] { background: #f7f9fc; color: #182238; }
+    [data-testid="stHeader"] { background: rgba(247,249,252,.94); }
+    [data-testid="stSidebar"] { background: linear-gradient(180deg,#ffffff 0%,#f8fbff 100%); border-right: 1px solid #e4eaf3; }
+    [data-testid="stSidebar"] * { color: #52617a; }
+    [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 { color: #182238 !important; }
+    [data-testid="stSidebar"] .stCaption { color: #8a96aa !important; }
+    [data-testid="stSidebar"] [data-baseweb="radio"] label { border-radius: 10px; padding: 9px 11px; margin: 2px 0; transition: all .15s ease; }
+    [data-testid="stSidebar"] [data-baseweb="radio"] label:hover { background: #eef4ff; color: #2563eb !important; transform: translateX(2px); }
+    [data-testid="stSidebar"] code { background: #f1f5fb; color: #3564b8; border: 1px solid #dce6f5; }
+    .main .block-container { max-width: 1500px; padding: 2rem 2.5rem 4rem; }
+    .main h1, .main h2, .main h3, .main p, .main label,
+    .main [data-testid="stMetricLabel"], .main [data-testid="stMetricValue"] { color: #182238 !important; }
+    .main h1 { font-size: 2rem; letter-spacing: -.03em; }
+    .main h2 { font-size: 1.3rem; }
+    .hero { position:relative; overflow:hidden; background:linear-gradient(120deg,#f8fbff 0%,#e9f1ff 58%,#dce9ff 100%); border:1px solid #dce8fa; padding:28px 32px; border-radius:20px; margin-bottom:24px; box-shadow:0 14px 36px rgba(34,72,126,.08); }
+    .hero:after { content:""; position:absolute; width:260px; height:260px; right:-70px; top:-120px; border-radius:50%; background:rgba(59,130,246,.12); box-shadow:0 0 0 28px rgba(59,130,246,.05),0 0 0 58px rgba(59,130,246,.025); }
+    .hero h1 { margin: 0; font-size: 2rem; }
+    .hero p { margin: 7px 0 0; color: #64748b; }
+    .card { background:#fff; border:1px solid #e4eaf3; border-radius:16px; padding:20px; box-shadow:0 5px 20px rgba(27,57,101,.05); }
+    .eyebrow { color:#4776c9; font-size:.72rem; font-weight:800; letter-spacing:.11em; text-transform:uppercase; margin-bottom:7px; }
+    .workflow { display:flex; gap:8px; align-items:center; margin:8px 0 22px; }
+    .workflow-step { flex:1; background:#fff; border:1px solid #e4eaf3; border-radius:10px; padding:9px 11px; color:#718096; font-size:.78rem; text-align:center; }
+    .workflow-step.active { color:#1d4ed8; border-color:#93b4f5; background:#eff5ff; font-weight:700; }
+    .workflow-line { height:2px; flex:0 0 18px; background:#dce5f2; }
+    .offer-card { background:#fff; border:1px solid #e4eaf3; border-radius:16px; padding:18px; margin:10px 0; box-shadow:0 5px 18px rgba(27,57,101,.035); }
+    .offer-card.recommended { border:1px solid #8ab0f4; box-shadow:0 8px 24px rgba(37,99,235,.11); }
+    .muted { color: #718096; font-size: .88rem; }
+    [data-testid="stMetric"] { background: #fff; border: 1px solid #e4eaf3; padding: 16px; border-radius: 14px; box-shadow: 0 3px 14px rgba(27,57,101,.035); }
+    [data-testid="stMetricLabel"] { color: #70809a !important; font-size: .78rem; }
+    [data-testid="stMetricValue"] { color: #1b2b4b !important; font-size: 1.5rem; }
+    [data-testid="stButton"] button { border-radius: 9px; min-height: 2.5rem; font-weight: 650; border-color: #d4dfef; }
+    [data-testid="stButton"] button[kind="primary"] { background: #2563eb; border-color: #2563eb; }
+    [data-testid="stTextInput"] input, [data-testid="stTextArea"] textarea,
+    [data-testid="stNumberInput"] input { color: #182238 !important; background: #fff !important; border-radius: 9px; }
+    [data-testid="stAlert"] { border-radius: 12px; }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 CHAT_HEALTH_URL = "http://127.0.0.1:8765/health"
 CHAT_HOST = "127.0.0.1"
 CHAT_PORT = 8765
@@ -173,9 +217,21 @@ def prepare_chat_rooms(request, result, products) -> None:
 
 
 def page_header(title: str, description: str) -> None:
-    st.title(title)
-    st.caption(description)
-    st.divider()
+    st.markdown(
+        f'<div class="hero"><div class="eyebrow">CommerceOS workspace</div><h1>{title}</h1><p>{description}</p></div>',
+        unsafe_allow_html=True,
+    )
+
+
+def workflow_strip(active: str) -> None:
+    steps = ["Request", "Negotiate", "Approve", "Chat", "Verify"]
+    html = ['<div class="workflow">']
+    for index, step in enumerate(steps):
+        html.append(f'<div class="workflow-step {"active" if step == active else ""}">{index + 1} · {step}</div>')
+        if index < len(steps) - 1:
+            html.append('<div class="workflow-line"></div>')
+    html.append("</div>")
+    st.markdown("".join(html), unsafe_allow_html=True)
 
 
 def status_badge(label: str, state: str) -> None:
@@ -204,7 +260,9 @@ def render_transaction_context(request, result) -> None:
 
 def render_offer(offer, products, selected_offer) -> None:
     product = products[offer.product_id]
-    with st.container(border=True):
+    recommended = offer == selected_offer
+    st.markdown(f'<div class="offer-card {"recommended" if recommended else ""}>', unsafe_allow_html=True)
+    with st.container():
         left, middle, right = st.columns([2, 1, 1])
         left.write(f"**{offer.seller_id}** — {product.name}")
         left.caption(f"{product.rating}★ · {product.review_count:,} reviews · {product.stock} in stock")
@@ -218,6 +276,7 @@ def render_offer(offer, products, selected_offer) -> None:
             status_badge("Offer received", "info")
         if offer.requires_seller_approval and offer.seller_approval_status != "approved":
             st.warning("Seller approval is required because this price is below the automatic approval floor.")
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
 def run_purchase_request(text: str, ollama: OllamaClient, ollama_ready: bool) -> None:
@@ -254,7 +313,11 @@ def run_purchase_request(text: str, ollama: OllamaClient, ollama_ready: bool) ->
 
 
 def render_overview() -> None:
-    page_header("CommerceOS command center", "One clear view of requests, approvals, negotiations, and agreement safety.")
+    st.markdown(
+        '<div class="hero"><h1>Welcome to CommerceOS</h1><p>Autonomous procurement with transparent negotiation, policy approvals, and agreement protection.</p></div>',
+        unsafe_allow_html=True,
+    )
+    workflow_strip("Request" if not current_bundle() else "Negotiate")
     bundle = current_bundle()
     result = bundle[1] if bundle else None
     active = bool(result and result.selected_offer)
@@ -280,18 +343,37 @@ def render_overview() -> None:
             st.rerun()
         return
     request, result, products, buyer = bundle
-    st.subheader("Current transaction")
+    st.subheader("Active transaction")
     render_transaction_context(request, result)
-    st.write(f"**Buyer need:** {request.original_text}")
-    st.write(f"**Current state:** `{st.session_state.transaction_machine.state.value}`")
-    next_step = "Review seller approval" if pending_approval else "Review the recommended offer"
-    st.info(f"Next step: **{next_step}**. Use the navigation on the left.")
-    if chat_request:
-        st.warning("A supplier has requested direct contact. Review it in Buyer Workspace.")
+    left, right = st.columns([1.25, .75])
+    with left:
+        st.markdown('<div class="card"><h3>Current procurement</h3>', unsafe_allow_html=True)
+        st.write(f"**Buyer need:** {request.original_text}")
+        st.write(f"**State:** `{st.session_state.transaction_machine.state.value}`")
+        if result.selected_offer:
+            st.write(f"**Recommended supplier:** {result.selected_offer.seller_id}")
+            st.write(f"**Offer:** ₹{result.selected_offer.total_price_inr:,} total · {result.selected_offer.delivery_days} days")
+        st.markdown("</div>", unsafe_allow_html=True)
+    with right:
+        st.markdown('<div class="card"><h3>What needs attention?</h3>', unsafe_allow_html=True)
+        next_step = "Review seller approval" if pending_approval else "Review the recommended offer"
+        st.info(f"Next step: **{next_step}**")
+        if chat_request:
+            st.warning("Supplier direct-chat request pending.")
+        elif result.supplier_chat_status == "approved":
+            st.success("Direct conversation approved.")
+        else:
+            st.caption("No direct conversation request is pending.")
+        st.markdown("</div>", unsafe_allow_html=True)
+    st.subheader("Recent activity")
+    activity = result.events[-5:] if result.events else ["Request created; waiting for agent activity."]
+    for event in reversed(activity):
+        st.markdown(f'<div class="activity-row">◉ &nbsp; {event}</div>', unsafe_allow_html=True)
 
 
 def render_buyer_workspace(ollama, ollama_ready) -> None:
     page_header("Buyer Workspace", "Describe the purchase. CommerceOS extracts constraints, negotiates, and protects your budget.")
+    workflow_strip("Request")
     text = st.text_area(
         "What do you need?",
         value=st.session_state.request_text or "Find a gaming laptop with an RTX 3050 or better, at least 16 GB RAM, under ₹70,000. Prioritize ratings and reviews.",
@@ -348,6 +430,7 @@ def render_buyer_workspace(ollama, ollama_ready) -> None:
 
 def render_agent_negotiations() -> None:
     page_header("Agent Negotiations", "Observe the real Buyer Agent and Supplier Agent negotiation. Human approval is not needed for ordinary AI messages.")
+    workflow_strip("Negotiate")
     bundle = current_bundle()
     if not bundle:
         st.info("Create a purchase request to start an agent negotiation.")
@@ -381,6 +464,7 @@ def render_agent_negotiations() -> None:
 
 def render_seller_portal(ollama, ollama_ready) -> None:
     page_header("Seller Portal", "Manage your catalog, policies, active AI negotiations, and requests for buyer contact.")
+    workflow_strip("Negotiate")
     sellers, products = sellers_and_products()
     st.subheader("Seller catalog")
     for seller in sellers:
@@ -421,6 +505,7 @@ def render_seller_portal(ollama, ollama_ready) -> None:
 
 def render_approvals() -> None:
     page_header("Approvals", "Only policy-sensitive actions appear here. Ordinary agent conversation does not require manual approval.")
+    workflow_strip("Approve")
     bundle = current_bundle()
     if not bundle:
         st.info("There are no approval requests.")
@@ -461,6 +546,7 @@ def render_approvals() -> None:
 
 def render_conversations() -> None:
     page_header("Conversations", "AI negotiation and direct human communication are separate threads linked to the same transaction.")
+    workflow_strip("Chat")
     bundle = current_bundle()
     if not bundle:
         st.info("Create a purchase request first.")
@@ -516,6 +602,7 @@ def render_conversations() -> None:
 
 def render_agreements() -> None:
     page_header("Agreements & Verification", "Accepted terms are hashed, versioned, and checked before simulated checkout.")
+    workflow_strip("Verify")
     bundle = current_bundle()
     if not bundle or not bundle[1].selected_offer:
         st.info("There is no accepted offer to verify.")
@@ -574,12 +661,16 @@ if st.session_state.pending_navigation:
     st.session_state.pending_navigation = None
 
 with st.sidebar:
-    st.markdown("## ◈ CommerceOS")
-    st.caption("Autonomous AI Commerce Network")
+    st.markdown(
+        '<div style="padding:8px 4px 18px"><div style="font-size:1.35rem;font-weight:800;color:#172554">◈ CommerceOS</div><div style="font-size:.72rem;color:#8090a8;margin-top:3px;letter-spacing:.04em">AUTONOMOUS COMMERCE NETWORK</div></div>',
+        unsafe_allow_html=True,
+    )
     page = st.radio("Workspace", NAVIGATION, key="navigation", label_visibility="collapsed")
     st.divider()
+    st.markdown('<div style="font-size:.7rem;font-weight:800;letter-spacing:.1em;color:#94a3b8;margin:4px 8px 8px">WORKSPACE</div>', unsafe_allow_html=True)
     status_badge("Gemma 3 4B online" if st.session_state.ollama_ready else "Gemma offline", "success" if st.session_state.ollama_ready else "warning")
-    st.caption("Local Ollama inference · deterministic policy enforcement")
+    st.caption("Local Ollama inference")
+    st.caption("Deterministic policy enforcement")
 
 if page == "Overview":
     render_overview()

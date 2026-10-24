@@ -30,7 +30,7 @@ class BuyerAgent:
                         f"Request: {text}"
                     ),
                 )
-                data = self._normalize_llm_data(data)
+                data = self._normalize_llm_data(data, text)
                 data["original_text"] = text
                 request = BuyerRequest.model_validate(data)
                 self.last_parse_source = "Gemma 3 4B via Ollama"
@@ -41,7 +41,10 @@ class BuyerAgent:
         return self._fallback_parse(text)
 
     @staticmethod
-    def _normalize_llm_data(data: dict[str, Any]) -> dict[str, Any]:
+    def _normalize_llm_data(data: dict[str, Any], text: str = "") -> dict[str, Any]:
+        explicit_budget = BuyerAgent._extract_budget(text)
+        if explicit_budget is not None:
+            data["max_budget_inr"] = explicit_budget
         constraints = data.get("hard_constraints", {})
         if isinstance(constraints, list):
             normalized: dict[str, Any] = {}
@@ -54,6 +57,10 @@ class BuyerAgent:
                 if gpu_match:
                     normalized["gpu_min"] = gpu_match.group(1).upper()
             data["hard_constraints"] = normalized
+        elif isinstance(constraints, dict):
+            data["hard_constraints"] = {
+                key: value for key, value in constraints.items() if value is not None
+            }
         return data
 
     def filter_products(self, request: BuyerRequest, products: list[Product]) -> list[Product]:
@@ -149,15 +156,29 @@ class BuyerAgent:
 
     def _fallback_parse(self, text: str) -> BuyerRequest:
         lower = text.lower()
-        budget_match = re.search(r"(?:under|below|max(?:imum)?|budget)[^\d₹]*(\d[\d,]*)", lower)
+        explicit_budget = self._extract_budget(text)
         ram_match = re.search(r"(\d+)\s*gb\s*(?:ram)?", lower)
         quantity_match = re.search(r"(\d+)\s*(?:units?|pieces?)", lower)
-        category = " ".join(text.split()[:3]).strip(" ,.")
+        category = re.split(r"\b(?:under|below|max(?:imum)?|budget)\b", lower, maxsplit=1)[0].strip(" ,.")
+        category = re.sub(r"^(?:i\s+need|please\s+get|find|buy|a|an|one)\s+", "", category).strip()
         return BuyerRequest(
             product_category=category or "general product",
             quantity=int(quantity_match.group(1)) if quantity_match else 1,
-            max_budget_inr=int(budget_match.group(1).replace(",", "")) if budget_match else 10**9,
+            max_budget_inr=explicit_budget if explicit_budget is not None else 10**9,
             hard_constraints={"ram_gb_min": int(ram_match.group(1))} if ram_match else {},
             preferences=["rating", "review_count", "delivery_days"],
             original_text=text,
         )
+
+    @staticmethod
+    def _extract_budget(text: str) -> int | None:
+        match = re.search(
+            r"(?:under|below|max(?:imum)?|budget)\s*(?:of\s*)?"
+            r"(?:₹|rs\.?|inr)?\s*([\d][\d,]*(?:\.\d+)?)\s*(k|thousand|lakh|lakhs)?",
+            text.lower(),
+        )
+        if not match:
+            return None
+        amount = float(match.group(1).replace(",", ""))
+        multiplier = {"k": 1_000, "thousand": 1_000, "lakh": 100_000, "lakhs": 100_000}
+        return int(amount * multiplier.get(match.group(2) or "", 1))

@@ -44,6 +44,12 @@ def test_gpu_min_constraint_supports_model_tiers():
     assert buyer.filter_products(request, products)
 
 
+def test_budget_parser_supports_k_suffix_and_preserves_explicit_limit():
+    request = BuyerAgent().parse_request("gaming phone under 10k")
+    assert request.product_category == "gaming phone"
+    assert request.max_budget_inr == 10000
+
+
 def test_negotiation_runs_a_bounded_counteroffer():
     buyer = BuyerAgent()
     sellers = [SellerAgent(profile) for profile in demo_sellers()]
