@@ -66,6 +66,17 @@ class BuyerAgent:
     def filter_products(self, request: BuyerRequest, products: list[Product]) -> list[Product]:
         return [product for product in products if self._meets_constraints(request, product)]
 
+    def meets_hard_requirements(self, request: BuyerRequest, product: Product) -> bool:
+        """Check product, stock, delivery, and hard attributes without applying price."""
+        if product.stock < request.quantity:
+            return False
+        if request.delivery_deadline_days is not None and product.delivery_days > request.delivery_deadline_days:
+            return False
+        return all(
+            self._constraint_is_met(product, key, expected)
+            for key, expected in request.hard_constraints.items()
+        )
+
     def rank_offers(self, request: BuyerRequest, offers: list[Offer], products: dict[str, Product]) -> list[Offer]:
         valid = [
             offer for offer in offers
@@ -95,7 +106,9 @@ class BuyerAgent:
                     (
                         "You are a buyer negotiation agent. Return only JSON with fields "
                         "proposed_unit_price_inr, requested_delivery_days, rationale. "
-                        "Never exceed the buyer budget or request an impossible delivery date."
+                        "Never exceed the buyer budget or request an impossible delivery date. "
+                        "This is a counteroffer, not an acceptance: never say that the buyer accepts "
+                        "or agrees to the current seller terms."
                     ),
                     (
                         f"Buyer maximum total budget: {request.max_budget_inr} INR. "
@@ -111,6 +124,7 @@ class BuyerAgent:
                         "unit_price_inr": proposed,
                         "delivery_days": max(0, requested_delivery),
                         "rationale": str(data.get("rationale", "Requesting a better total value.")),
+                        "message": str(data.get("message", "")).strip(),
                     }
             except (OllamaError, ValueError, TypeError, KeyError):
                 pass
@@ -118,6 +132,90 @@ class BuyerAgent:
             "unit_price_inr": target,
             "delivery_days": max(0, offer.delivery_days - 1),
             "rationale": "Requesting a lower price and one-day delivery improvement.",
+            "message": "",
+        }
+
+    def generate_dialogue(
+        self,
+        *,
+        context: str,
+        purpose: str,
+        proposal: dict[str, Any] | None = None,
+    ) -> dict[str, str]:
+        if not self.llm:
+            raise OllamaError("Gemma is required for buyer dialogue")
+        system_prompt = (
+                "You are the Buyer Agent in a real commercial negotiation. "
+                "Write the actual message you will send to the named recipient. "
+                "Use only facts in the context and structured proposal. Do not reveal hidden supplier policies. "
+                "The structured proposal is authoritative: repeat every number and term exactly, and never "
+                "invent, change, accept, reject, or request a commercial term that is not supported by it. "
+                "Match the message type exactly: a clarification asks or confirms facts without accepting; "
+                "a counteroffer proposes a change and must not say accepted/agreed; a selection compares "
+                "packages without accepting; an acceptance is the only type allowed to accept terms. "
+                "If no proposal is provided, ask a neutral clarification without asserting new product, price, "
+                "delivery, stock, warranty, or approval facts. Return JSON with message and rationale strings. "
+                "Do not return chain-of-thought."
+            )
+        for attempt in range(2):
+            data = self.llm.generate_json(
+                system_prompt,
+                f"Purpose: {purpose}\nContext: {context}\nStructured proposal: {proposal or {}}\n"
+                + (
+                    "Return both non-empty JSON strings now and correct the message type exactly."
+                    if attempt else ""
+                ),
+            )
+            message = str(data.get("message", "")).strip()
+            rationale = str(data.get("rationale", "")).strip()
+            lower_message = message.lower()
+            acceptance_words = re.search(r"\b(accept|acceptance|agree|agreed|approve)\b", lower_message)
+            wrong_acceptance = purpose in {"request", "clarification", "counteroffer", "selection"} and acceptance_words
+            missing_acceptance = purpose == "acceptance" and not acceptance_words
+            if message and rationale and not wrong_acceptance and not missing_acceptance:
+                return {"message": message, "rationale": rationale}
+        raise OllamaError("Gemma returned incomplete buyer dialogue")
+
+    def negotiate(self, context: str) -> dict[str, Any]:
+        if not self.llm:
+            raise OllamaError("Gemma is required for buyer negotiation")
+        data = self.llm.generate_json(
+            (
+                "You are the autonomous Buyer Agent. Decide your next negotiation action from the "
+                "current state. Return JSON with action, message, rationale, and proposal. "
+                "action must be one of request, counteroffer, selection, acceptance, rejection, walk_away. "
+                "proposal must be an object or null with only unit_price_inr, quantity, delivery_days. "
+                "Never relax hard requirements, exceed budget, invent supplier facts, or accept during a "
+                "counteroffer. The message must be your actual message to the recipient, not a template."
+            ),
+            context,
+        )
+        action = str(data.get("action", "")).strip().lower()
+        action = {
+            "propose": "counteroffer",
+            "counter_offer": "counteroffer",
+            "counter-offer": "counteroffer",
+            "accept": "acceptance",
+            "agree": "acceptance",
+            "compare": "selection",
+            "decline": "rejection",
+            "withdraw": "walk_away",
+            "continue": "counteroffer",
+            "negotiate": "counteroffer",
+        }.get(action, action)
+        if action not in {"request", "counteroffer", "selection", "acceptance", "rejection", "walk_away"}:
+            raise OllamaError(f"Gemma returned an invalid buyer action: {action or '<empty>'}")
+        message = str(data.get("message", "")).strip()
+        rationale = str(data.get("rationale", "")).strip()
+        proposal = data.get("proposal")
+        if not message or not rationale or (proposal is not None and not isinstance(proposal, dict)):
+            raise OllamaError("Gemma returned an incomplete buyer action")
+        return {
+            "action": action,
+            "message": message,
+            "rationale": rationale,
+            "proposal": proposal,
+            "_audit": self.llm.last_audit,
         }
 
     def propose_counteroffer(self, request: BuyerRequest, offer: Offer, product: Product) -> int | None:

@@ -36,6 +36,14 @@ def test_demo_sellers_have_compliant_initial_offers():
     assert all(offer is not None for offer in offers)
 
 
+def test_suppliers_above_budget_can_enter_negotiation():
+    buyer = BuyerAgent()
+    request = buyer.parse_request("gaming laptop with at least 16 GB RAM under ₹65000")
+    product = demo_sellers()[0].products[0]
+    assert buyer.meets_hard_requirements(request, product)
+    assert product.listed_price_inr > request.max_budget_inr
+
+
 def test_gpu_min_constraint_supports_model_tiers():
     buyer = BuyerAgent()
     request = buyer.parse_request("gaming laptop under ₹70000")
@@ -70,6 +78,21 @@ def test_discount_below_approval_floor_requires_seller_approval():
     assert offer.seller_approval_status == "pending"
     approved = seller.approve(offer)
     assert approved.seller_approval_status == "approved"
+
+
+def test_supplier_beats_public_market_price_when_authorized():
+    seller = SellerAgent(demo_sellers()[1])
+    product = seller.profile.products[0]
+    request = BuyerAgent().parse_request("gaming laptop under ₹70000")
+    offer = seller.respond_to_counteroffer(
+        request,
+        product,
+        proposed_price=67000,
+        round_number=2,
+        market_best_unit_price=66500,
+    )
+    assert offer.unit_price_inr == 66000
+    assert offer.unit_price_inr < 66500
 
 
 def test_agreement_has_sha256_integrity_record():

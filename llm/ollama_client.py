@@ -1,5 +1,8 @@
 import json
+import hashlib
+from datetime import datetime, timezone
 from typing import Any
+from uuid import uuid4
 
 import requests
 
@@ -20,6 +23,7 @@ class OllamaClient:
         self.host = host
         self.model = model
         self.timeout_seconds = timeout_seconds
+        self.last_audit: dict[str, str] | None = None
 
     def is_available(self) -> bool:
         try:
@@ -31,6 +35,8 @@ class OllamaClient:
             return False
 
     def generate_json(self, system: str, prompt: str) -> dict[str, Any]:
+        request_id = str(uuid4())
+        prompt_hash = hashlib.sha256(f"{system}\n{prompt}".encode("utf-8")).hexdigest()
         payload = {
             "model": self.model,
             "system": system,
@@ -52,4 +58,12 @@ class OllamaClient:
             raise OllamaError(f"Ollama JSON generation failed: {exc}") from exc
         if not isinstance(result, dict):
             raise OllamaError("Ollama returned JSON, but not a JSON object")
+        self.last_audit = {
+            "ollama_request_id": request_id,
+            "model": self.model,
+            "prompt_hash": prompt_hash,
+            "response_hash": hashlib.sha256(raw.encode("utf-8")).hexdigest(),
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "generation_status": "completed",
+        }
         return result

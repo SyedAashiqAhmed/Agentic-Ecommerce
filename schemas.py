@@ -114,15 +114,27 @@ class Offer(BaseModel):
 
 class NegotiationMessage(BaseModel):
     sender_id: str
+    recipient_id: str | None = None
     sender_role: Literal["buyer_agent", "seller_agent", "seller_human", "system"]
     message: str
     round_number: int = Field(ge=1)
     message_type: Literal[
-        "request", "offer", "counteroffer", "approval_request",
-        "approval_response", "policy_notice", "selection", "system",
+        "request", "offer", "counteroffer", "clarification", "concession",
+        "rejection", "acceptance", "approval_request", "approval_response",
+        "policy_notice", "selection", "walk_away", "system",
     ] = "system"
     related_offer_id: str | None = None
     proposal: dict[str, Any] | None = None
+    rationale: str = ""
+    validation_status: Literal["not_checked", "valid", "invalid", "pending"] = "not_checked"
+    changed_terms: list[str] = Field(default_factory=list)
+    generated_by: Literal["gemma", "deterministic", "system"] = "deterministic"
+    model: str | None = None
+    ollama_request_id: str | None = None
+    prompt_hash: str | None = None
+    response_hash: str | None = None
+    generated_at: datetime | None = None
+    generation_status: Literal["verified", "not_run", "failed"] = "not_run"
 
 
 class Agreement(BaseModel):
@@ -163,3 +175,6 @@ class NegotiationResult(BaseModel):
     supplier_chat_status: Literal["not_requested", "pending", "approved", "rejected"] = "not_requested"
     chat_room_id: str | None = None
     direct_chat_room_id: str | None = None
+    current_round: int = Field(default=1, ge=1)
+    negotiation_status: Literal["negotiating", "agreed", "no_agreement", "stagnated", "round_limit"] = "negotiating"
+    termination_reason: str = ""

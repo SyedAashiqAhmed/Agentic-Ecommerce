@@ -1,0 +1,1612 @@
+{
+ "url": "http://127.0.0.1:5173",
+ "at": "2026-10-25T17:59:46.732Z",
+ "allow": [],
+ "viewports": [
+  {
+   "width": 1440,
+   "height": 900,
+   "load": "load",
+   "screens": 2,
+   "filled": [
+    0.57,
+    0.57
+   ],
+   "motion": {
+    "elements": 12,
+    "css": 12,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "page": {
+     "height": 952,
+     "screens": 1.1,
+     "words": 144,
+     "img": 0,
+     "video": 0,
+     "canvas": 0,
+     "svg": 30,
+     "sections": 2,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Commerce, in motion.",
+     "words": 3,
+     "chars": 20,
+     "lines": 1,
+     "size": 26,
+     "vw": 1.8,
+     "font": "Public Sans",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.15,
+     "top": 86,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "Commerce, in motion.",
+     "words": 3,
+     "lines": 1,
+     "size": 26,
+     "font": "Public Sans"
+    },
+    "headings": [
+     {
+      "text": "Turn intent into an intelligent deal.",
+      "words": 6,
+      "chars": 37,
+      "lines": 2,
+      "size": 30,
+      "vw": 2.1,
+      "font": "Public Sans",
+      "weight": 600,
+      "tracking": -0.03,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.28,
+      "top": 225,
+      "tag": "h2",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 1,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Public Sans",
+       "share": 0.99,
+       "mono": false
+      },
+      {
+       "family": "Space Grotesk",
+       "share": 0.01,
+       "mono": false
+      }
+     ],
+     "familyCount": 2,
+     "sizes": [
+      10,
+      11,
+      12,
+      13,
+      16,
+      21,
+      26,
+      30
+     ],
+     "sizeCount": 8,
+     "notLoaded": [],
+     "body": {
+      "font": "Public Sans",
+      "size": 12,
+      "leading": 1.65,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 7.8
+     },
+     "measureChars": 67,
+     "max": {
+      "size": 30,
+      "vw": 2.1,
+      "font": "Public Sans",
+      "text": "Turn intent into"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0,
+     "centerShare": 0.14,
+     "smallText": 26
+    },
+    "eyebrows": [
+     {
+      "text": "Autonomous commerce network",
+      "above": "Turn intent into an intelligent deal.",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 12,
+      "top": 193
+     }
+    ],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#171719",
+     "bodyBgHsl": {
+      "h": 240,
+      "s": 0.04,
+      "l": 0.09
+     },
+     "dark": true,
+     "sectionBgs": [
+      {
+       "color": "#171719",
+       "top": 0,
+       "hsl": {
+        "h": 240,
+        "s": 0.04,
+        "l": 0.09
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#a6a7ad",
+       "share": 0.54
+      },
+      {
+       "color": "#b3b4b9",
+       "share": 0.12
+      },
+      {
+       "color": "#f0f0f1",
+       "share": 0.1
+      },
+      {
+       "color": "#f4f4f5",
+       "share": 0.08
+      },
+      {
+       "color": "#171719",
+       "share": 0.06
+      }
+     ],
+     "button": {
+      "bg": "#f4f4f5",
+      "hsl": {
+       "h": 240,
+       "s": 0.05,
+       "l": 0.96
+      },
+      "fg": "#171719"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 3,
+     "inHero": 3,
+     "radius": 4,
+     "height": 32,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Create Purchase Request",
+      "New procurement",
+      "Start a procurement"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 6,
+     "hairlineSamples": [
+      "aside.sidebar 62px",
+      "header.topbar 1378px",
+      "div.metric-card 311px",
+      "div.metric-card 311px",
+      "div.metric-card 311px"
+     ],
+     "outlinedBoxes": 0,
+     "dashed": 0,
+     "blurred": 3,
+     "roundedBoxes": 3,
+     "boxRadius": 6,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 0,
+     "fixed": false,
+     "height": 58,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "public sans",
+     "space grotesk"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "pageH": 952,
+    "margins": {
+     "left": 94,
+     "right": 32
+    },
+    "sections": [
+     {
+      "sel": "div.commerce-hero",
+      "tag": "div",
+      "top": 156,
+      "height": 276,
+      "words": 52,
+      "media": 0,
+      "middle": 587,
+      "heading": {
+       "text": "Turn intent into",
+       "size": 30,
+       "tag": "h2"
+      },
+      "left": 126,
+      "right": 64,
+      "textLeft": 126,
+      "textRight": 64,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "div.dashboard-grid",
+      "tag": "div",
+      "top": 667,
+      "height": 225,
+      "words": 18,
+      "media": 0,
+      "middle": 211,
+      "heading": {
+       "text": "Recent activity",
+       "size": 16,
+       "tag": "h2"
+      },
+      "left": 137,
+      "right": 220,
+      "textLeft": 137,
+      "textRight": 220,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Commerce, in motion.",
+      "size": 26,
+      "top": 86,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 126,
+      "n": 2
+     },
+     {
+      "x": 94,
+      "n": 1
+     },
+     {
+      "x": 137,
+      "n": 1
+     },
+     {
+      "x": 935,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 5,
+    "bodySize": 12,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0.1,
+    "voidBox": {
+     "x": 540,
+     "y": 180,
+     "w": 540,
+     "h": 240
+    }
+   },
+   "app": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "dark": true,
+    "ground": "#171719",
+    "sidebar": {
+     "w": 62,
+     "tag": "aside",
+     "links": 8,
+     "share": 0.04
+    },
+    "topbar": {
+     "h": 58
+    },
+    "canvas": {
+     "left": 32,
+     "right": 32
+    },
+    "hero": {
+     "text": "Commerce, in motion.",
+     "words": 3,
+     "chars": 20,
+     "lines": 1,
+     "size": 26,
+     "vw": 1.8,
+     "font": "Public Sans",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.15,
+     "top": 86,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 0,
+    "layout": {
+     "panels": 3,
+     "firstScreen": 3,
+     "ragged": [],
+     "voids": [
+      {
+       "gap": 61,
+       "at": 704,
+       "panel": "Recent activity"
+      },
+      {
+       "gap": 61,
+       "at": 704,
+       "panel": "Active transaction"
+      }
+     ]
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 3,
+     "radii": [
+      [
+       6,
+       3
+      ]
+     ],
+     "heavyBorders": 0,
+     "borderSamples": [],
+     "heavyShadows": 0,
+     "softShadows": 0,
+     "shadowSamples": [],
+     "glass": 0
+    },
+    "chips": {
+     "count": 0,
+     "hues": 0,
+     "samples": []
+    },
+    "numbers": {
+     "cells": 0,
+     "leftAligned": 0,
+     "figures": 0,
+     "tabularShare": null,
+     "kpiMax": null
+    },
+    "rows": null,
+    "chartHues": 0,
+    "placeholders": [],
+    "type": {
+     "under13": 0.82,
+     "tiny": 2,
+     "tinySamples": [
+      "Gemma 3 4B 0px",
+      "Live 10px"
+     ],
+     "sizes": [
+      0,
+      10,
+      11,
+      12,
+      13,
+      16,
+      18,
+      26,
+      30
+     ]
+    },
+    "title": {
+     "text": "Commerce, in motion.",
+     "size": 26,
+     "top": 86
+    },
+    "colourShare": 0
+   },
+   "consoleErrors": []
+  },
+  {
+   "width": 768,
+   "height": 1024,
+   "load": "load",
+   "screens": 2,
+   "filled": [
+    0.68,
+    0.61
+   ],
+   "motion": {
+    "elements": 12,
+    "css": 12,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "page": {
+     "height": 1084,
+     "screens": 1.1,
+     "words": 137,
+     "img": 0,
+     "video": 0,
+     "canvas": 0,
+     "svg": 30,
+     "sections": 2,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Commerce, in motion.",
+     "words": 3,
+     "chars": 20,
+     "lines": 1,
+     "size": 26,
+     "vw": 3.4,
+     "font": "Public Sans",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.15,
+     "top": 86,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "Commerce, in motion.",
+     "words": 3,
+     "lines": 1,
+     "size": 26,
+     "font": "Public Sans"
+    },
+    "headings": [
+     {
+      "text": "Commerce, in motion.",
+      "words": 3,
+      "chars": 20,
+      "lines": 1,
+      "size": 26,
+      "vw": 3.4,
+      "font": "Public Sans",
+      "weight": 600,
+      "tracking": -0.02,
+      "leading": 1.15,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.65,
+      "top": 86,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "Turn intent into an intelligent deal.",
+      "words": 6,
+      "chars": 37,
+      "lines": 2,
+      "size": 30,
+      "vw": 3.9,
+      "font": "Public Sans",
+      "weight": 600,
+      "tracking": -0.03,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.41,
+      "top": 231,
+      "tag": "h2",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 2,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": 3,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Public Sans",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      10,
+      11,
+      12,
+      13,
+      16,
+      21,
+      26,
+      30
+     ],
+     "sizeCount": 8,
+     "notLoaded": [],
+     "body": {
+      "font": "Public Sans",
+      "size": 12,
+      "leading": 1.65,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 7.8
+     },
+     "measureChars": 52,
+     "max": {
+      "size": 30,
+      "vw": 3.9,
+      "font": "Public Sans",
+      "text": "Turn intent into"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0,
+     "centerShare": 0.15,
+     "smallText": 25
+    },
+    "eyebrows": [
+     {
+      "text": "Autonomous commerce network",
+      "above": "Turn intent into an intelligent deal.",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 12,
+      "top": 199
+     }
+    ],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#171719",
+     "bodyBgHsl": {
+      "h": 240,
+      "s": 0.04,
+      "l": 0.09
+     },
+     "dark": true,
+     "sectionBgs": [
+      {
+       "color": "#171719",
+       "top": 0,
+       "hsl": {
+        "h": 240,
+        "s": 0.04,
+        "l": 0.09
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#a6a7ad",
+       "share": 0.53
+      },
+      {
+       "color": "#b3b4b9",
+       "share": 0.12
+      },
+      {
+       "color": "#f0f0f1",
+       "share": 0.1
+      },
+      {
+       "color": "#f4f4f5",
+       "share": 0.08
+      },
+      {
+       "color": "#171719",
+       "share": 0.06
+      }
+     ],
+     "button": {
+      "bg": "#f4f4f5",
+      "hsl": {
+       "h": 240,
+       "s": 0.05,
+       "l": 0.96
+      },
+      "fg": "#171719"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 3,
+     "inHero": 3,
+     "radius": 4,
+     "height": 44,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Create Purchase Request",
+      "New procurement",
+      "Start a procurement"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 6,
+     "hairlineSamples": [
+      "aside.sidebar 62px",
+      "header.topbar 706px",
+      "div.metric-card 309px",
+      "div.metric-card 309px",
+      "div.metric-card 309px"
+     ],
+     "outlinedBoxes": 0,
+     "dashed": 0,
+     "blurred": 3,
+     "roundedBoxes": 3,
+     "boxRadius": 6,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 0,
+     "fixed": false,
+     "height": 58,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "public sans"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "pageH": 1084,
+    "margins": {
+     "left": 94,
+     "right": 32
+    },
+    "sections": [
+     {
+      "sel": "div.commerce-hero",
+      "tag": "div",
+      "top": 171,
+      "height": 277,
+      "words": 45,
+      "media": 0,
+      "middle": 51,
+      "heading": {
+       "text": "Turn intent into",
+       "size": 30,
+       "tag": "h2"
+      },
+      "left": 126,
+      "right": 76,
+      "textLeft": 126,
+      "textRight": 76,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "div.metric-grid",
+      "tag": "div",
+      "top": 567,
+      "height": 186,
+      "words": 19,
+      "media": 0,
+      "middle": 225,
+      "heading": null,
+      "left": 94,
+      "right": 233,
+      "textLeft": 94,
+      "textRight": 233,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "div.dashboard-grid",
+      "tag": "div",
+      "top": 799,
+      "height": 225,
+      "words": 18,
+      "media": 0,
+      "middle": 85,
+      "heading": {
+       "text": "Recent activity",
+       "size": 16,
+       "tag": "h2"
+      },
+      "left": 137,
+      "right": 85,
+      "textLeft": 137,
+      "textRight": 85,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Commerce, in motion.",
+      "size": 26,
+      "top": 86,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 126,
+      "n": 2
+     },
+     {
+      "x": 94,
+      "n": 1
+     },
+     {
+      "x": 137,
+      "n": 1
+     },
+     {
+      "x": 532,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 5,
+    "bodySize": 12,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "dark": true,
+    "ground": "#171719",
+    "sidebar": {
+     "w": 62,
+     "tag": "aside",
+     "links": 8,
+     "share": 0.08
+    },
+    "topbar": {
+     "h": 58
+    },
+    "canvas": {
+     "left": 32,
+     "right": 32
+    },
+    "hero": {
+     "text": "Commerce, in motion.",
+     "words": 3,
+     "chars": 20,
+     "lines": 1,
+     "size": 26,
+     "vw": 3.4,
+     "font": "Public Sans",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.15,
+     "top": 86,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 0,
+    "layout": {
+     "panels": 4,
+     "firstScreen": 4,
+     "ragged": [],
+     "voids": [
+      {
+       "gap": 61,
+       "at": 836,
+       "panel": "Recent activity"
+      },
+      {
+       "gap": 61,
+       "at": 836,
+       "panel": "Active transaction"
+      }
+     ]
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 4,
+     "radii": [
+      [
+       6,
+       4
+      ]
+     ],
+     "heavyBorders": 0,
+     "borderSamples": [],
+     "heavyShadows": 0,
+     "softShadows": 0,
+     "shadowSamples": [],
+     "glass": 0
+    },
+    "chips": {
+     "count": 0,
+     "hues": 0,
+     "samples": []
+    },
+    "numbers": {
+     "cells": 0,
+     "leftAligned": 0,
+     "figures": 0,
+     "tabularShare": null,
+     "kpiMax": null
+    },
+    "rows": null,
+    "chartHues": 0,
+    "placeholders": [],
+    "type": {
+     "under13": 0.82,
+     "tiny": 2,
+     "tinySamples": [
+      "Gemma 3 4B 0px",
+      "Live 10px"
+     ],
+     "sizes": [
+      0,
+      10,
+      11,
+      12,
+      13,
+      16,
+      18,
+      26,
+      30
+     ]
+    },
+    "title": {
+     "text": "Commerce, in motion.",
+     "size": 26,
+     "top": 86
+    },
+    "colourShare": 0.001
+   },
+   "consoleErrors": []
+  },
+  {
+   "width": 390,
+   "height": 844,
+   "load": "load",
+   "screens": 2,
+   "filled": [
+    0.7,
+    0.66
+   ],
+   "motion": {
+    "elements": 8,
+    "css": 8,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "page": {
+     "height": 1445,
+     "screens": 1.7,
+     "words": 129,
+     "img": 0,
+     "video": 0,
+     "canvas": 0,
+     "svg": 30,
+     "sections": 2,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Commerce, in motion.",
+     "words": 3,
+     "chars": 20,
+     "lines": 2,
+     "size": 26,
+     "vw": 6.7,
+     "font": "Public Sans",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.15,
+     "top": 86,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "Commerce, in motion.",
+     "words": 3,
+     "lines": 2,
+     "size": 26,
+     "font": "Public Sans"
+    },
+    "headings": [
+     {
+      "text": "Commerce, in motion.",
+      "words": 3,
+      "chars": 20,
+      "lines": 2,
+      "size": 26,
+      "vw": 6.7,
+      "font": "Public Sans",
+      "weight": 600,
+      "tracking": -0.02,
+      "leading": 1.15,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.6,
+      "top": 86,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "Turn intent into an intelligent deal.",
+      "words": 6,
+      "chars": 37,
+      "lines": 2,
+      "size": 30,
+      "vw": 7.7,
+      "font": "Public Sans",
+      "weight": 600,
+      "tracking": -0.03,
+      "leading": 1.08,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.82,
+      "top": 270,
+      "tag": "h2",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 2,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": 3,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Public Sans",
+       "share": 1,
+       "mono": false
+      }
+     ],
+     "familyCount": 1,
+     "sizes": [
+      10,
+      11,
+      12,
+      13,
+      16,
+      21,
+      26,
+      30
+     ],
+     "sizeCount": 8,
+     "notLoaded": [],
+     "body": {
+      "font": "Public Sans",
+      "size": 12,
+      "leading": 1.65,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 7.8
+     },
+     "measureChars": 53,
+     "max": {
+      "size": 30,
+      "vw": 7.7,
+      "font": "Public Sans",
+      "text": "Turn intent into"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0,
+     "centerShare": 0.14,
+     "smallText": 25
+    },
+    "eyebrows": [
+     {
+      "text": "Autonomous commerce network",
+      "above": "Turn intent into an intelligent deal.",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 12,
+      "top": 238
+     }
+    ],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#171719",
+     "bodyBgHsl": {
+      "h": 240,
+      "s": 0.04,
+      "l": 0.09
+     },
+     "dark": true,
+     "sectionBgs": [
+      {
+       "color": "#171719",
+       "top": 0,
+       "hsl": {
+        "h": 240,
+        "s": 0.04,
+        "l": 0.09
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#a6a7ad",
+       "share": 0.47
+      },
+      {
+       "color": "#8d8f96",
+       "share": 0.12
+      },
+      {
+       "color": "#b3b4b9",
+       "share": 0.12
+      },
+      {
+       "color": "#f0f0f1",
+       "share": 0.1
+      },
+      {
+       "color": "#f4f4f5",
+       "share": 0.08
+      }
+     ],
+     "button": {
+      "bg": "#f4f4f5",
+      "hsl": {
+       "h": 240,
+       "s": 0.05,
+       "l": 0.96
+      },
+      "fg": "#171719"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 3,
+     "inHero": 3,
+     "radius": 4,
+     "height": 32,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Create Purchase Request",
+      "New procurement",
+      "Start a procurement"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 1,
+     "hairlineSamples": [
+      "header.topbar 390px"
+     ],
+     "outlinedBoxes": 0,
+     "dashed": 0,
+     "blurred": 1,
+     "roundedBoxes": 4,
+     "boxRadius": 6,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 0,
+     "fixed": false,
+     "height": 58,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "public sans"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "pageH": 1445,
+    "margins": {
+     "left": 16,
+     "right": 16
+    },
+    "sections": [
+     {
+      "sel": "div.command-heading",
+      "tag": "div",
+      "top": 58,
+      "height": 158,
+      "words": 17,
+      "media": 0,
+      "middle": 1,
+      "heading": {
+       "text": "Commerce, in motion.",
+       "size": 26,
+       "tag": "h1"
+      },
+      "left": 16,
+      "right": 16,
+      "textLeft": 16,
+      "textRight": 30,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "div.commerce-hero",
+      "tag": "div",
+      "top": 216,
+      "height": 265,
+      "words": 32,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "Turn intent into",
+       "size": 30,
+       "tag": "h2"
+      },
+      "left": 36,
+      "right": 46,
+      "textLeft": 36,
+      "textRight": 46,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "div.network-ribbon",
+      "tag": "div",
+      "top": 501,
+      "height": 152,
+      "words": 18,
+      "media": 0,
+      "middle": 101,
+      "heading": null,
+      "left": 70,
+      "right": 30,
+      "textLeft": 70,
+      "textRight": 30,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "div.metric-grid",
+      "tag": "div",
+      "top": 673,
+      "height": 186,
+      "words": 19,
+      "media": 0,
+      "middle": 83,
+      "heading": null,
+      "left": 16,
+      "right": 75,
+      "textLeft": 16,
+      "textRight": 75,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "div.dashboard-grid",
+      "tag": "div",
+      "top": 905,
+      "height": 474,
+      "words": 18,
+      "media": 0,
+      "middle": 3,
+      "heading": {
+       "text": "Recent activity",
+       "size": 16,
+       "tag": "h2"
+      },
+      "left": 56,
+      "right": 34,
+      "textLeft": 56,
+      "textRight": 34,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Commerce, in motion.",
+      "size": 26,
+      "top": 86,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 36,
+      "n": 2
+     },
+     {
+      "x": 59,
+      "n": 2
+     },
+     {
+      "x": 16,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 5,
+    "bodySize": 12,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "dark": true,
+    "ground": "#171719",
+    "sidebar": null,
+    "topbar": {
+     "h": 58
+    },
+    "canvas": {
+     "left": 16,
+     "right": -18
+    },
+    "hero": {
+     "text": "Commerce, in motion.",
+     "words": 3,
+     "chars": 20,
+     "lines": 2,
+     "size": 26,
+     "vw": 6.7,
+     "font": "Public Sans",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.15,
+     "top": 86,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 0,
+    "layout": {
+     "panels": 4,
+     "firstScreen": 2,
+     "ragged": [],
+     "voids": [
+      {
+       "gap": 61,
+       "at": 942,
+       "panel": "Recent activity"
+      },
+      {
+       "gap": 61,
+       "at": 1191,
+       "panel": "Active transaction"
+      }
+     ]
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 4,
+     "radii": [
+      [
+       6,
+       4
+      ]
+     ],
+     "heavyBorders": 0,
+     "borderSamples": [],
+     "heavyShadows": 0,
+     "softShadows": 0,
+     "shadowSamples": [],
+     "glass": 0
+    },
+    "chips": {
+     "count": 0,
+     "hues": 0,
+     "samples": []
+    },
+    "numbers": {
+     "cells": 0,
+     "leftAligned": 0,
+     "figures": 0,
+     "tabularShare": null,
+     "kpiMax": null
+    },
+    "rows": null,
+    "chartHues": 0,
+    "placeholders": [],
+    "type": {
+     "under13": 0.83,
+     "tiny": 2,
+     "tinySamples": [
+      "Gemma 3 4B 0px",
+      "Live 10px"
+     ],
+     "sizes": [
+      0,
+      10,
+      11,
+      12,
+      13,
+      16,
+      18,
+      26,
+      30
+     ]
+    },
+    "title": {
+     "text": "Commerce, in motion.",
+     "size": 26,
+     "top": 86
+    },
+    "colourShare": 0.001
+   },
+   "consoleErrors": []
+  }
+ ],
+ "findings": [
+  {
+   "level": "WARN",
+   "id": "dev-server",
+   "width": 1440,
+   "message": "This page is served by a development server (Vite, webpack or Next in dev mode).",
+   "fix": "Run the last gate on the production build too (vite build && vite preview, next build && next start, or the built index.html): minifiers and bundlers change the CSS a visitor receives.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "tiny-text",
+   "width": 1440,
+   "message": "82% of the text is under 13px.",
+   "fix": "Data and labels read at 13–14px; keep 11–12px for sublines and axis ticks.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "panel-void",
+   "width": 1440,
+   "message": "2 card(s) hold a blank band inside: 61px in \"Recent activity\", 61px in \"Active transaction\".",
+   "fix": "A card stretches to its neighbour only when it has content to fill. Keep a legend or a note directly under its chart (only an action or a total may sit at a stretched card's foot), let a short card keep its own height (align-items: start), and let a filtered block shrink to its rows."
+  }
+ ],
+ "images": [
+  {
+   "viewport": "desktop",
+   "width": 1440,
+   "fold": "C:\\hackto\\.taste-skill\\final\\desktop-fold.jpg",
+   "pages": [
+    "C:\\hackto\\.taste-skill\\final\\desktop-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "tablet",
+   "width": 768,
+   "fold": "C:\\hackto\\.taste-skill\\final\\tablet-fold.jpg",
+   "pages": [
+    "C:\\hackto\\.taste-skill\\final\\tablet-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "mobile",
+   "width": 390,
+   "fold": "C:\\hackto\\.taste-skill\\final\\mobile-fold.jpg",
+   "pages": [
+    "C:\\hackto\\.taste-skill\\final\\mobile-page-01.jpg"
+   ],
+   "film": []
+  }
+ ]
+}

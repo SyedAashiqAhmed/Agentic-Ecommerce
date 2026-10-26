@@ -13,6 +13,7 @@ from agents.seller_agent import SellerAgent
 from business.negotiation import NegotiationEngine
 from data import demo_sellers
 from llm.ollama_client import OllamaClient
+from llm.ollama_client import OllamaError
 
 
 class PurchaseInput(BaseModel):
@@ -42,7 +43,15 @@ def create_purchase(payload: PurchaseInput) -> dict[str, Any]:
     request = buyer.parse_request(payload.text)
     sellers = [SellerAgent(profile, llm=client if client.is_available() else None) for profile in demo_sellers()]
     products = {product.product_id: product for seller in sellers for product in seller.profile.products}
-    result = NegotiationEngine(buyer).run(request, sellers, products)
+    if not client.is_available():
+        raise HTTPException(
+            status_code=503,
+            detail="Gemma is unavailable. Live negotiation is stopped; no scripted fallback is used.",
+        )
+    try:
+        result = NegotiationEngine(buyer, require_llm=True).run(request, sellers, products)
+    except OllamaError as exc:
+        raise HTTPException(status_code=503, detail=f"Live Gemma negotiation stopped: {exc}") from exc
     if result.selected_offer:
         result.chat_room_id = result.selected_offer.offer_id
         result.direct_chat_room_id = f"{result.chat_room_id}-direct"

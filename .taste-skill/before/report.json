@@ -1,0 +1,2400 @@
+{
+ "url": "http://127.0.0.1:5173",
+ "at": "2026-10-25T17:55:24.721Z",
+ "allow": [],
+ "viewports": [
+  {
+   "width": 1440,
+   "height": 900,
+   "load": "load",
+   "screens": 2,
+   "filled": [
+    0.69,
+    0.76
+   ],
+   "motion": {
+    "elements": 16,
+    "css": 16,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "page": {
+     "height": 1122,
+     "screens": 1.2,
+     "words": 185,
+     "img": 0,
+     "video": 0,
+     "canvas": 0,
+     "svg": 29,
+     "sections": 2,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [
+      "✦",
+      "✓"
+     ],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Commerce, in motion.",
+     "words": 3,
+     "chars": 20,
+     "lines": 1,
+     "size": 39,
+     "vw": 2.7,
+     "font": "Space Grotesk",
+     "weight": 700,
+     "tracking": -0.06,
+     "leading": 1,
+     "top": 139,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "Commerce, in motion.",
+     "words": 3,
+     "lines": 1,
+     "size": 39,
+     "font": "Space Grotesk"
+    },
+    "headings": [
+     {
+      "text": "Commerce, in motion.",
+      "words": 3,
+      "chars": 20,
+      "lines": 1,
+      "size": 39,
+      "vw": 2.7,
+      "font": "Space Grotesk",
+      "weight": 700,
+      "tracking": -0.065,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.36,
+      "top": 139,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "Turn intent into an intelligent deal.",
+      "words": 6,
+      "chars": 37,
+      "lines": 2,
+      "size": 34,
+      "vw": 2.4,
+      "font": "Space Grotesk",
+      "weight": 600,
+      "tracking": -0.045,
+      "leading": 1.06,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.28,
+      "top": 298,
+      "tag": "h2",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 2,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": 6,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "DM Sans",
+       "share": 0.9,
+       "mono": false
+      },
+      {
+       "family": "Space Grotesk",
+       "share": 0.1,
+       "mono": false
+      }
+     ],
+     "familyCount": 2,
+     "sizes": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      15,
+      16,
+      18,
+      27,
+      34,
+      39
+     ],
+     "sizeCount": 12,
+     "notLoaded": [],
+     "body": {
+      "font": "DM Sans",
+      "size": 12,
+      "leading": 1.65,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": null
+     },
+     "measureChars": 67,
+     "max": {
+      "size": 39,
+      "vw": 2.7,
+      "font": "Space Grotesk",
+      "text": "Commerce, in motion."
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 9,
+     "microLabelShare": 0.112,
+     "microSamples": [
+      "WORKSPACE",
+      "COMMAND CENTER / 24 OCTOBER 2026",
+      "AUTONOMOUS COMMERCE NETWORK",
+      "LIVE TRANSACTION GRAPH",
+      "POWERED BY",
+      "LOCAL INFERENCE"
+     ],
+     "upperShare": 0.11,
+     "centerShare": 0.11,
+     "smallText": 30
+    },
+    "eyebrows": [
+     {
+      "text": "COMMAND CENTER / 24 OCTOBER 2026",
+      "above": "Commerce, in motion.",
+      "upper": true,
+      "tracked": true,
+      "mono": false,
+      "pill": false,
+      "size": 10,
+      "top": 118
+     },
+     {
+      "text": "AUTONOMOUS COMMERCE NETWORK",
+      "above": "Turn intent into an intelligent deal.",
+      "upper": true,
+      "tracked": true,
+      "mono": false,
+      "pill": false,
+      "size": 10,
+      "top": 267
+     }
+    ],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#f3f6fb",
+     "bodyBgHsl": {
+      "h": 217,
+      "s": 0.5,
+      "l": 0.97
+     },
+     "dark": false,
+     "sectionBgs": [],
+     "textColors": [
+      {
+       "color": "#a6b4d0",
+       "share": 0.09
+      },
+      {
+       "color": "#b3c3e3",
+       "share": 0.09
+      },
+      {
+       "color": "#31a36b",
+       "share": 0.07
+      },
+      {
+       "color": "#8493aa",
+       "share": 0.07
+      },
+      {
+       "color": "#9aa7ba",
+       "share": 0.06
+      }
+     ],
+     "button": {
+      "bg": "#2d6be9",
+      "hsl": {
+       "h": 220,
+       "s": 0.81,
+       "l": 0.55
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": [
+      {
+       "text": "CommerceOS",
+       "ratio": 2.1,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#a2aec0",
+       "bg": "#f3f6fb"
+      },
+      {
+       "text": "Start a purchase request to see live age",
+       "ratio": 2.4,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#9aa7ba",
+       "bg": "#ffffff"
+      },
+      {
+       "text": "No active transaction yet.",
+       "ratio": 2.4,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#9aa7ba",
+       "bg": "#ffffff"
+      },
+      {
+       "text": "Negotiate",
+       "ratio": 2.5,
+       "need": 4.5,
+       "size": 11,
+       "fg": "#9aa6b9",
+       "bg": "#ffffff"
+      },
+      {
+       "text": "Approve",
+       "ratio": 2.5,
+       "need": 4.5,
+       "size": 11,
+       "fg": "#9aa6b9",
+       "bg": "#ffffff"
+      },
+      {
+       "text": "Chat",
+       "ratio": 2.5,
+       "need": 4.5,
+       "size": 11,
+       "fg": "#9aa6b9",
+       "bg": "#ffffff"
+      }
+     ]
+    },
+    "buttons": {
+     "count": 3,
+     "inHero": 3,
+     "radius": 9,
+     "height": 36,
+     "withShadow": 3,
+     "withGradient": 3,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Create Purchase Request",
+      "New procurement",
+      "Start a procurement"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 15,
+     "shadowOverlay": 2,
+     "shadowSamples": [
+      "button.create-btn → rgba(71, 121, 234, 0.2) 0px 7px 16px 0px",
+      "button.primary-btn.command-cta → rgba(78, 110, 236, 0.2) 0px 12px 24px 0px",
+      "div.commerce-hero → rgba(20, 45, 107, 0.14) 0px 22px 50px 0px",
+      "button.hero-action → rgba(5, 12, 38, 0.267) 0px 10px 25px 0px"
+     ],
+     "gradients": 2,
+     "scrims": 0,
+     "gradientSamples": [
+      "aside.sidebar → linear-gradient(rgb(11, 23, 48) 0%, rgb(16, 30, 61) 58%, rgb(17, 27, 53) 100%)",
+      "div.commerce-hero → linear-gradient(115deg, rgb(13, 29, 58) 0%, rgb(25, 46, 97) 59%, rgb(54, 75, 154) 100%)"
+     ],
+     "gradientText": 0,
+     "hairlines": 1,
+     "hairlineSamples": [
+      "header.topbar 1170px"
+     ],
+     "outlinedBoxes": 9,
+     "dashed": 2,
+     "blurred": 4,
+     "roundedBoxes": 9,
+     "boxRadius": 17,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": [
+      {
+       "count": 4,
+       "iconTopped": true,
+       "rounded": true,
+       "top": 621
+      }
+     ]
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 0,
+     "fixed": false,
+     "height": 76,
+     "floatingPill": false,
+     "blur": true
+    },
+    "fontsLoaded": [
+     "dm sans",
+     "space grotesk"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "pageH": 1122,
+    "margins": {
+     "left": 320,
+     "right": 50
+    },
+    "sections": [
+     {
+      "sel": "div.command-heading",
+      "tag": "div",
+      "top": 76,
+      "height": 150,
+      "words": 23,
+      "media": 0,
+      "middle": 385,
+      "heading": {
+       "text": "Commerce, in motion.",
+       "size": 39,
+       "tag": "h1"
+      },
+      "left": 320,
+      "right": 50,
+      "textLeft": 320,
+      "textRight": 67,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "div.commerce-hero",
+      "tag": "div",
+      "top": 226,
+      "height": 290,
+      "words": 52,
+      "media": 0,
+      "middle": 321,
+      "heading": {
+       "text": "Turn intent into",
+       "size": 34,
+       "tag": "h2"
+      },
+      "left": 363,
+      "right": 79,
+      "textLeft": 363,
+      "textRight": 79,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "div.metric-grid",
+      "tag": "div",
+      "top": 621,
+      "height": 133,
+      "words": 19,
+      "media": 0,
+      "middle": 173,
+      "heading": null,
+      "left": 387,
+      "right": 140,
+      "textLeft": 387,
+      "textRight": 140,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "div.dashboard-grid",
+      "tag": "div",
+      "top": 824,
+      "height": 238,
+      "words": 18,
+      "media": 0,
+      "middle": 127,
+      "heading": {
+       "text": "Recent activity",
+       "size": 15,
+       "tag": "h2"
+      },
+      "left": 366,
+      "right": 189,
+      "textLeft": 366,
+      "textRight": 189,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Commerce, in motion.",
+      "size": 39,
+      "top": 139,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 363,
+      "n": 3
+     },
+     {
+      "x": 320,
+      "n": 1
+     },
+     {
+      "x": 1016,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 5,
+    "bodySize": 12,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0.07,
+    "voidBox": {
+     "x": 780,
+     "y": 360,
+     "w": 480,
+     "h": 180
+    }
+   },
+   "app": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "dark": false,
+    "ground": "#f3f6fb",
+    "sidebar": {
+     "w": 270,
+     "tag": "aside",
+     "links": 8,
+     "share": 0.19
+    },
+    "topbar": {
+     "h": 76
+    },
+    "canvas": {
+     "left": 50,
+     "right": 50
+    },
+    "hero": {
+     "text": "Commerce, in motion.",
+     "words": 3,
+     "chars": 20,
+     "lines": 1,
+     "size": 39,
+     "vw": 2.7,
+     "font": "Space Grotesk",
+     "weight": 700,
+     "tracking": -0.06,
+     "leading": 1,
+     "top": 139,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 0,
+    "layout": {
+     "panels": 8,
+     "firstScreen": 8,
+     "ragged": [],
+     "voids": [
+      {
+       "gap": 62,
+       "at": 868,
+       "panel": "Recent activity"
+      },
+      {
+       "gap": 62,
+       "at": 864,
+       "panel": "Active transaction"
+      }
+     ]
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 8,
+     "radii": [
+      [
+       17,
+       4
+      ],
+      [
+       18,
+       2
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       24,
+       1
+      ]
+     ],
+     "heavyBorders": 0,
+     "borderSamples": [],
+     "heavyShadows": 7,
+     "softShadows": 1,
+     "shadowSamples": [
+      "rgba(20, 45, 107, 0.14) 0px 22px 50px 0px",
+      "rgba(23, 52, 107, 0.047) 0px 9px 25px 0px",
+      "rgba(23, 52, 107, 0.047) 0px 9px 25px 0px"
+     ],
+     "glass": 1
+    },
+    "chips": {
+     "count": 7,
+     "hues": 4,
+     "samples": [
+      {
+       "hue": 218,
+       "size": 30,
+       "radius": "9px"
+      },
+      {
+       "hue": 253,
+       "size": 30,
+       "radius": "9px"
+      },
+      {
+       "hue": 146,
+       "size": 30,
+       "radius": "9px"
+      },
+      {
+       "hue": 218,
+       "size": 34,
+       "radius": "10px"
+      }
+     ]
+    },
+    "numbers": {
+     "cells": 0,
+     "leftAligned": 0,
+     "figures": 0,
+     "tabularShare": null,
+     "kpiMax": null
+    },
+    "rows": null,
+    "chartHues": 0,
+    "placeholders": [],
+    "type": {
+     "under13": 0.75,
+     "tiny": 31,
+     "tinySamples": [
+      "Autonomous Commerce 10px",
+      "WORKSPACE 10px",
+      "Local AI engine online 10px",
+      "Buyer workspace 10px"
+     ],
+     "sizes": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      15,
+      18,
+      34,
+      39
+     ]
+    },
+    "title": {
+     "text": "Commerce, in motion.",
+     "size": 39,
+     "top": 139
+    },
+    "colourShare": 0.219
+   },
+   "consoleErrors": []
+  },
+  {
+   "width": 768,
+   "height": 1024,
+   "load": "load",
+   "screens": 2,
+   "filled": [
+    0.76,
+    0.84
+   ],
+   "motion": {
+    "elements": 16,
+    "css": 16,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "page": {
+     "height": 1324,
+     "screens": 1.3,
+     "words": 185,
+     "img": 0,
+     "video": 0,
+     "canvas": 0,
+     "svg": 29,
+     "sections": 2,
+     "horizontalOverflow": 132,
+     "overflowCulprits": [
+      "button.create-btn (+104px)",
+      "button.primary-btn.command-cta (+104px)",
+      "div.visual-label.label-top (+36px)"
+     ],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [
+      "✦",
+      "✓"
+     ],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Commerce, in motion.",
+     "words": 3,
+     "chars": 20,
+     "lines": 1,
+     "size": 39,
+     "vw": 5.1,
+     "font": "Space Grotesk",
+     "weight": 700,
+     "tracking": -0.06,
+     "leading": 1,
+     "top": 139,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "Commerce, in motion.",
+     "words": 3,
+     "lines": 1,
+     "size": 39,
+     "font": "Space Grotesk"
+    },
+    "headings": [
+     {
+      "text": "Commerce, in motion.",
+      "words": 3,
+      "chars": 20,
+      "lines": 1,
+      "size": 39,
+      "vw": 5.1,
+      "font": "Space Grotesk",
+      "weight": 700,
+      "tracking": -0.065,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.6,
+      "top": 139,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "Turn intent into an intelligent deal.",
+      "words": 6,
+      "chars": 37,
+      "lines": 2,
+      "size": 34,
+      "vw": 4.4,
+      "font": "Space Grotesk",
+      "weight": 600,
+      "tracking": -0.045,
+      "leading": 1.06,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.37,
+      "top": 309,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "0",
+      "words": 1,
+      "chars": 1,
+      "lines": 1,
+      "size": 27,
+      "vw": 3.5,
+      "font": "Space Grotesk",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.13,
+      "top": 720,
+      "tag": "b",
+      "kind": "heading"
+     },
+     {
+      "text": "0",
+      "words": 1,
+      "chars": 1,
+      "lines": 1,
+      "size": 27,
+      "vw": 3.5,
+      "font": "Space Grotesk",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.13,
+      "top": 720,
+      "tag": "b",
+      "kind": "heading"
+     },
+     {
+      "text": "0",
+      "words": 1,
+      "chars": 1,
+      "lines": 1,
+      "size": 27,
+      "vw": 3.5,
+      "font": "Space Grotesk",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.13,
+      "top": 844,
+      "tag": "b",
+      "kind": "heading"
+     },
+     {
+      "text": "7",
+      "words": 1,
+      "chars": 1,
+      "lines": 1,
+      "size": 27,
+      "vw": 3.5,
+      "font": "Space Grotesk",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.13,
+      "top": 844,
+      "tag": "b",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 6,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": 1,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "DM Sans",
+       "share": 0.9,
+       "mono": false
+      },
+      {
+       "family": "Space Grotesk",
+       "share": 0.1,
+       "mono": false
+      }
+     ],
+     "familyCount": 2,
+     "sizes": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      15,
+      16,
+      18,
+      27,
+      34,
+      39
+     ],
+     "sizeCount": 12,
+     "notLoaded": [],
+     "body": {
+      "font": "DM Sans",
+      "size": 12,
+      "leading": 1.65,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": null
+     },
+     "measureChars": 48,
+     "max": {
+      "size": 39,
+      "vw": 5.1,
+      "font": "Space Grotesk",
+      "text": "Commerce, in motion."
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 9,
+     "microLabelShare": 0.112,
+     "microSamples": [
+      "WORKSPACE",
+      "COMMAND CENTER / 24 OCTOBER 2026",
+      "AUTONOMOUS COMMERCE NETWORK",
+      "LIVE TRANSACTION GRAPH",
+      "POWERED BY",
+      "LOCAL INFERENCE"
+     ],
+     "upperShare": 0.11,
+     "centerShare": 0.11,
+     "smallText": 30
+    },
+    "eyebrows": [
+     {
+      "text": "COMMAND CENTER / 24 OCTOBER 2026",
+      "above": "Commerce, in motion.",
+      "upper": true,
+      "tracked": true,
+      "mono": false,
+      "pill": false,
+      "size": 10,
+      "top": 118
+     },
+     {
+      "text": "AUTONOMOUS COMMERCE NETWORK",
+      "above": "Turn intent into an intelligent deal.",
+      "upper": true,
+      "tracked": true,
+      "mono": false,
+      "pill": false,
+      "size": 10,
+      "top": 278
+     },
+     {
+      "text": "Active negotiations",
+      "above": "0",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 10,
+      "top": 703
+     },
+     {
+      "text": "Pending approvals",
+      "above": "0",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 10,
+      "top": 703
+     },
+     {
+      "text": "Awaiting verification",
+      "above": "0",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 10,
+      "top": 827
+     },
+     {
+      "text": "Completed",
+      "above": "7",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 10,
+      "top": 827
+     }
+    ],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#f3f6fb",
+     "bodyBgHsl": {
+      "h": 217,
+      "s": 0.5,
+      "l": 0.97
+     },
+     "dark": false,
+     "sectionBgs": [],
+     "textColors": [
+      {
+       "color": "#a6b4d0",
+       "share": 0.09
+      },
+      {
+       "color": "#b3c3e3",
+       "share": 0.09
+      },
+      {
+       "color": "#31a36b",
+       "share": 0.07
+      },
+      {
+       "color": "#8493aa",
+       "share": 0.07
+      },
+      {
+       "color": "#9aa7ba",
+       "share": 0.06
+      }
+     ],
+     "button": {
+      "bg": "#2d6be9",
+      "hsl": {
+       "h": 220,
+       "s": 0.81,
+       "l": 0.55
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": [
+      {
+       "text": "CommerceOS",
+       "ratio": 2.1,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#a2aec0",
+       "bg": "#f3f6fb"
+      },
+      {
+       "text": "Start a purchase request to see live age",
+       "ratio": 2.4,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#9aa7ba",
+       "bg": "#ffffff"
+      },
+      {
+       "text": "No active transaction yet.",
+       "ratio": 2.4,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#9aa7ba",
+       "bg": "#ffffff"
+      },
+      {
+       "text": "Negotiate",
+       "ratio": 2.5,
+       "need": 4.5,
+       "size": 11,
+       "fg": "#9aa6b9",
+       "bg": "#ffffff"
+      },
+      {
+       "text": "Approve",
+       "ratio": 2.5,
+       "need": 4.5,
+       "size": 11,
+       "fg": "#9aa6b9",
+       "bg": "#ffffff"
+      },
+      {
+       "text": "Chat",
+       "ratio": 2.5,
+       "need": 4.5,
+       "size": 11,
+       "fg": "#9aa6b9",
+       "bg": "#ffffff"
+      }
+     ]
+    },
+    "buttons": {
+     "count": 3,
+     "inHero": 3,
+     "radius": 9,
+     "height": 52,
+     "withShadow": 3,
+     "withGradient": 3,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Create Purchase Request",
+      "New procurement",
+      "Start a procurement"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 15,
+     "shadowOverlay": 2,
+     "shadowSamples": [
+      "button.create-btn → rgba(71, 121, 234, 0.2) 0px 7px 16px 0px",
+      "button.primary-btn.command-cta → rgba(78, 110, 236, 0.2) 0px 12px 24px 0px",
+      "div.commerce-hero → rgba(20, 45, 107, 0.14) 0px 22px 50px 0px",
+      "button.hero-action → rgba(5, 12, 38, 0.267) 0px 10px 25px 0px"
+     ],
+     "gradients": 2,
+     "scrims": 0,
+     "gradientSamples": [
+      "aside.sidebar → linear-gradient(rgb(11, 23, 48) 0%, rgb(16, 30, 61) 58%, rgb(17, 27, 53) 100%)",
+      "div.commerce-hero → linear-gradient(115deg, rgb(13, 29, 58) 0%, rgb(25, 46, 97) 59%, rgb(54, 75, 154) 100%)"
+     ],
+     "gradientText": 0,
+     "hairlines": 1,
+     "hairlineSamples": [
+      "header.topbar 670px"
+     ],
+     "outlinedBoxes": 10,
+     "dashed": 2,
+     "blurred": 4,
+     "roundedBoxes": 10,
+     "boxRadius": 17,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": [
+      {
+       "count": 4,
+       "iconTopped": true,
+       "rounded": true,
+       "top": 683
+      }
+     ]
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 0,
+     "fixed": false,
+     "height": 76,
+     "floatingPill": false,
+     "blur": true
+    },
+    "fontsLoaded": [
+     "dm sans",
+     "space grotesk"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "pageH": 1324,
+    "margins": {
+     "left": 258,
+     "right": 29
+    },
+    "sections": [
+     {
+      "sel": "div.command-heading",
+      "tag": "div",
+      "top": 76,
+      "height": 167,
+      "words": 23,
+      "media": 0,
+      "middle": 14,
+      "heading": {
+       "text": "Commerce, in motion.",
+       "size": 39,
+       "tag": "h1"
+      },
+      "left": 258,
+      "right": 0,
+      "textLeft": 258,
+      "textRight": -79,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "div.commerce-hero",
+      "tag": "div",
+      "top": 243,
+      "height": 310,
+      "words": 52,
+      "media": 0,
+      "middle": 58,
+      "heading": {
+       "text": "Turn intent into",
+       "size": 34,
+       "tag": "h2"
+      },
+      "left": 301,
+      "right": 0,
+      "textLeft": 301,
+      "textRight": -75,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "div.metric-grid",
+      "tag": "div",
+      "top": 683,
+      "height": 257,
+      "words": 19,
+      "media": 0,
+      "middle": 216,
+      "heading": null,
+      "left": 325,
+      "right": 29,
+      "textLeft": 325,
+      "textRight": 29,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "div.dashboard-grid",
+      "tag": "div",
+      "top": 1010,
+      "height": 254,
+      "words": 18,
+      "media": 0,
+      "middle": 95,
+      "heading": {
+       "text": "Recent activity",
+       "size": 15,
+       "tag": "h2"
+      },
+      "left": 304,
+      "right": 0,
+      "textLeft": 304,
+      "textRight": -56,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Commerce, in motion.",
+      "size": 39,
+      "top": 139,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 301,
+      "n": 3
+     },
+     {
+      "x": 258,
+      "n": 1
+     },
+     {
+      "x": 680,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 5,
+    "bodySize": 12,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "dark": false,
+    "ground": "#f3f6fb",
+    "sidebar": {
+     "w": 230,
+     "tag": "aside",
+     "links": 8,
+     "share": 0.3
+    },
+    "topbar": {
+     "h": 76
+    },
+    "canvas": {
+     "left": 28,
+     "right": -104
+    },
+    "hero": {
+     "text": "Commerce, in motion.",
+     "words": 3,
+     "chars": 20,
+     "lines": 1,
+     "size": 39,
+     "vw": 5.1,
+     "font": "Space Grotesk",
+     "weight": 700,
+     "tracking": -0.06,
+     "leading": 1,
+     "top": 139,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 0,
+    "layout": {
+     "panels": 9,
+     "firstScreen": 7,
+     "ragged": [],
+     "voids": [
+      {
+       "gap": 77,
+       "at": 1166,
+       "panel": "Active transaction"
+      },
+      {
+       "gap": 62,
+       "at": 1054,
+       "panel": "Recent activity"
+      }
+     ]
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 12,
+     "radii": [
+      [
+       0,
+       4
+      ],
+      [
+       17,
+       4
+      ],
+      [
+       18,
+       2
+      ],
+      [
+       24,
+       1
+      ],
+      [
+       16,
+       1
+      ]
+     ],
+     "heavyBorders": 0,
+     "borderSamples": [],
+     "heavyShadows": 7,
+     "softShadows": 2,
+     "shadowSamples": [
+      "rgba(20, 45, 107, 0.14) 0px 22px 50px 0px",
+      "rgba(23, 52, 107, 0.047) 0px 9px 25px 0px",
+      "rgba(23, 52, 107, 0.047) 0px 9px 25px 0px"
+     ],
+     "glass": 1
+    },
+    "chips": {
+     "count": 7,
+     "hues": 4,
+     "samples": [
+      {
+       "hue": 218,
+       "size": 30,
+       "radius": "9px"
+      },
+      {
+       "hue": 253,
+       "size": 30,
+       "radius": "9px"
+      },
+      {
+       "hue": 146,
+       "size": 30,
+       "radius": "9px"
+      },
+      {
+       "hue": 218,
+       "size": 34,
+       "radius": "10px"
+      }
+     ]
+    },
+    "numbers": {
+     "cells": 0,
+     "leftAligned": 0,
+     "figures": 0,
+     "tabularShare": null,
+     "kpiMax": null
+    },
+    "rows": null,
+    "chartHues": 0,
+    "placeholders": [],
+    "type": {
+     "under13": 0.75,
+     "tiny": 31,
+     "tinySamples": [
+      "Autonomous Commerce 10px",
+      "WORKSPACE 10px",
+      "Local AI engine online 10px",
+      "Buyer workspace 10px"
+     ],
+     "sizes": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      15,
+      18,
+      34,
+      39
+     ]
+    },
+    "title": {
+     "text": "Commerce, in motion.",
+     "size": 39,
+     "top": 139
+    },
+    "colourShare": 0.202
+   },
+   "consoleErrors": []
+  },
+  {
+   "width": 390,
+   "height": 844,
+   "load": "load",
+   "screens": 3,
+   "filled": [
+    0.57,
+    0.57,
+    0.57
+   ],
+   "motion": {
+    "elements": 16,
+    "css": 16,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 980,
+     "h": 2121
+    },
+    "page": {
+     "height": 2121,
+     "screens": 1,
+     "words": 185,
+     "img": 0,
+     "video": 0,
+     "canvas": 0,
+     "svg": 29,
+     "sections": 2,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [
+      "✦",
+      "✓"
+     ],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Commerce, in motion.",
+     "words": 3,
+     "chars": 20,
+     "lines": 1,
+     "size": 39,
+     "vw": 4,
+     "font": "Space Grotesk",
+     "weight": 700,
+     "tracking": -0.06,
+     "leading": 1,
+     "top": 139,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "Commerce, in motion.",
+     "words": 3,
+     "lines": 1,
+     "size": 39,
+     "font": "Space Grotesk"
+    },
+    "headings": [
+     {
+      "text": "Commerce, in motion.",
+      "words": 3,
+      "chars": 20,
+      "lines": 1,
+      "size": 39,
+      "vw": 4,
+      "font": "Space Grotesk",
+      "weight": 700,
+      "tracking": -0.065,
+      "leading": 1,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.53,
+      "top": 139,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "Turn intent into an intelligent deal.",
+      "words": 6,
+      "chars": 37,
+      "lines": 2,
+      "size": 34,
+      "vw": 3.5,
+      "font": "Space Grotesk",
+      "weight": 600,
+      "tracking": -0.045,
+      "leading": 1.06,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.34,
+      "top": 298,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "0",
+      "words": 1,
+      "chars": 1,
+      "lines": 1,
+      "size": 27,
+      "vw": 2.8,
+      "font": "Space Grotesk",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.1,
+      "top": 669,
+      "tag": "b",
+      "kind": "heading"
+     },
+     {
+      "text": "0",
+      "words": 1,
+      "chars": 1,
+      "lines": 1,
+      "size": 27,
+      "vw": 2.8,
+      "font": "Space Grotesk",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.1,
+      "top": 669,
+      "tag": "b",
+      "kind": "heading"
+     },
+     {
+      "text": "0",
+      "words": 1,
+      "chars": 1,
+      "lines": 1,
+      "size": 27,
+      "vw": 2.8,
+      "font": "Space Grotesk",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.1,
+      "top": 793,
+      "tag": "b",
+      "kind": "heading"
+     },
+     {
+      "text": "7",
+      "words": 1,
+      "chars": 1,
+      "lines": 1,
+      "size": 27,
+      "vw": 2.8,
+      "font": "Space Grotesk",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.1,
+      "top": 793,
+      "tag": "b",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 6,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": 1,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "DM Sans",
+       "share": 0.9,
+       "mono": false
+      },
+      {
+       "family": "Space Grotesk",
+       "share": 0.1,
+       "mono": false
+      }
+     ],
+     "familyCount": 2,
+     "sizes": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      15,
+      16,
+      18,
+      27,
+      34,
+      39
+     ],
+     "sizeCount": 12,
+     "notLoaded": [],
+     "body": {
+      "font": "DM Sans",
+      "size": 12,
+      "leading": 1.65,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": null
+     },
+     "measureChars": 55,
+     "max": {
+      "size": 39,
+      "vw": 4,
+      "font": "Space Grotesk",
+      "text": "Commerce, in motion."
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 9,
+     "microLabelShare": 0.112,
+     "microSamples": [
+      "WORKSPACE",
+      "COMMAND CENTER / 24 OCTOBER 2026",
+      "AUTONOMOUS COMMERCE NETWORK",
+      "LIVE TRANSACTION GRAPH",
+      "POWERED BY",
+      "LOCAL INFERENCE"
+     ],
+     "upperShare": 0.11,
+     "centerShare": 0.11,
+     "smallText": 30
+    },
+    "eyebrows": [
+     {
+      "text": "COMMAND CENTER / 24 OCTOBER 2026",
+      "above": "Commerce, in motion.",
+      "upper": true,
+      "tracked": true,
+      "mono": false,
+      "pill": false,
+      "size": 10,
+      "top": 118
+     },
+     {
+      "text": "AUTONOMOUS COMMERCE NETWORK",
+      "above": "Turn intent into an intelligent deal.",
+      "upper": true,
+      "tracked": true,
+      "mono": false,
+      "pill": false,
+      "size": 10,
+      "top": 267
+     },
+     {
+      "text": "Active negotiations",
+      "above": "0",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 10,
+      "top": 652
+     },
+     {
+      "text": "Pending approvals",
+      "above": "0",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 10,
+      "top": 652
+     },
+     {
+      "text": "Awaiting verification",
+      "above": "0",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 10,
+      "top": 776
+     },
+     {
+      "text": "Completed",
+      "above": "7",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 10,
+      "top": 776
+     }
+    ],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#f3f6fb",
+     "bodyBgHsl": {
+      "h": 217,
+      "s": 0.5,
+      "l": 0.97
+     },
+     "dark": false,
+     "sectionBgs": [],
+     "textColors": [
+      {
+       "color": "#a6b4d0",
+       "share": 0.09
+      },
+      {
+       "color": "#b3c3e3",
+       "share": 0.09
+      },
+      {
+       "color": "#31a36b",
+       "share": 0.07
+      },
+      {
+       "color": "#8493aa",
+       "share": 0.07
+      },
+      {
+       "color": "#9aa7ba",
+       "share": 0.06
+      }
+     ],
+     "button": {
+      "bg": "#2d6be9",
+      "hsl": {
+       "h": 220,
+       "s": 0.81,
+       "l": 0.55
+      },
+      "fg": "#ffffff"
+     },
+     "lowContrast": [
+      {
+       "text": "CommerceOS",
+       "ratio": 2.1,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#a2aec0",
+       "bg": "#f3f6fb"
+      },
+      {
+       "text": "Start a purchase request to see live age",
+       "ratio": 2.4,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#9aa7ba",
+       "bg": "#ffffff"
+      },
+      {
+       "text": "No active transaction yet.",
+       "ratio": 2.4,
+       "need": 4.5,
+       "size": 12,
+       "fg": "#9aa7ba",
+       "bg": "#ffffff"
+      },
+      {
+       "text": "Negotiate",
+       "ratio": 2.5,
+       "need": 4.5,
+       "size": 11,
+       "fg": "#9aa6b9",
+       "bg": "#ffffff"
+      },
+      {
+       "text": "Approve",
+       "ratio": 2.5,
+       "need": 4.5,
+       "size": 11,
+       "fg": "#9aa6b9",
+       "bg": "#ffffff"
+      },
+      {
+       "text": "Chat",
+       "ratio": 2.5,
+       "need": 4.5,
+       "size": 11,
+       "fg": "#9aa6b9",
+       "bg": "#ffffff"
+      }
+     ]
+    },
+    "buttons": {
+     "count": 3,
+     "inHero": 3,
+     "radius": 9,
+     "height": 36,
+     "withShadow": 3,
+     "withGradient": 3,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Create Purchase Request",
+      "New procurement",
+      "Start a procurement"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 15,
+     "shadowOverlay": 2,
+     "shadowSamples": [
+      "button.create-btn → rgba(71, 121, 234, 0.2) 0px 7px 16px 0px",
+      "button.primary-btn.command-cta → rgba(78, 110, 236, 0.2) 0px 12px 24px 0px",
+      "div.commerce-hero → rgba(20, 45, 107, 0.14) 0px 22px 50px 0px",
+      "button.hero-action → rgba(5, 12, 38, 0.267) 0px 10px 25px 0px"
+     ],
+     "gradients": 2,
+     "scrims": 0,
+     "gradientSamples": [
+      "aside.sidebar → linear-gradient(rgb(11, 23, 48) 0%, rgb(16, 30, 61) 58%, rgb(17, 27, 53) 100%)",
+      "div.commerce-hero → linear-gradient(115deg, rgb(13, 29, 58) 0%, rgb(25, 46, 97) 59%, rgb(54, 75, 154) 100%)"
+     ],
+     "gradientText": 0,
+     "hairlines": 1,
+     "hairlineSamples": [
+      "header.topbar 750px"
+     ],
+     "outlinedBoxes": 9,
+     "dashed": 2,
+     "blurred": 4,
+     "roundedBoxes": 9,
+     "boxRadius": 17,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": [
+      {
+       "count": 4,
+       "iconTopped": true,
+       "rounded": true,
+       "top": 632
+      }
+     ]
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 0,
+     "fixed": false,
+     "height": 76,
+     "floatingPill": false,
+     "blur": true
+    },
+    "fontsLoaded": [
+     "dm sans",
+     "space grotesk"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 980,
+     "h": 2121
+    },
+    "pageH": 2121,
+    "margins": {
+     "left": 258,
+     "right": 28
+    },
+    "sections": [
+     {
+      "sel": "div.command-heading",
+      "tag": "div",
+      "top": 76,
+      "height": 150,
+      "words": 23,
+      "media": 0,
+      "middle": 9,
+      "heading": {
+       "text": "Commerce, in motion.",
+       "size": 39,
+       "tag": "h1"
+      },
+      "left": 258,
+      "right": 28,
+      "textLeft": 258,
+      "textRight": 45,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "div.commerce-hero",
+      "tag": "div",
+      "top": 226,
+      "height": 290,
+      "words": 52,
+      "media": 0,
+      "middle": 54,
+      "heading": {
+       "text": "Turn intent into",
+       "size": 34,
+       "tag": "h2"
+      },
+      "left": 301,
+      "right": 57,
+      "textLeft": 301,
+      "textRight": 57,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "div.metric-grid",
+      "tag": "div",
+      "top": 632,
+      "height": 257,
+      "words": 19,
+      "media": 0,
+      "middle": 256,
+      "heading": null,
+      "left": 325,
+      "right": 201,
+      "textLeft": 325,
+      "textRight": 201,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "div.dashboard-grid",
+      "tag": "div",
+      "top": 959,
+      "height": 238,
+      "words": 18,
+      "media": 0,
+      "middle": 95,
+      "heading": {
+       "text": "Recent activity",
+       "size": 15,
+       "tag": "h2"
+      },
+      "left": 304,
+      "right": 92,
+      "textLeft": 304,
+      "textRight": 92,
+      "fullBleed": false,
+      "footer": true,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Commerce, in motion.",
+      "size": 39,
+      "top": 139,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 301,
+      "n": 3
+     },
+     {
+      "x": 258,
+      "n": 1
+     },
+     {
+      "x": 728,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 5,
+    "bodySize": 12,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": {
+    "viewport": {
+     "w": 980,
+     "h": 2121
+    },
+    "dark": false,
+    "ground": "#f3f6fb",
+    "sidebar": {
+     "w": 230,
+     "tag": "aside",
+     "links": 8,
+     "share": 0.23
+    },
+    "topbar": {
+     "h": 76
+    },
+    "canvas": {
+     "left": 28,
+     "right": 28
+    },
+    "hero": {
+     "text": "Commerce, in motion.",
+     "words": 3,
+     "chars": 20,
+     "lines": 1,
+     "size": 39,
+     "vw": 4,
+     "font": "Space Grotesk",
+     "weight": 700,
+     "tracking": -0.06,
+     "leading": 1,
+     "top": 139,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 0,
+    "layout": {
+     "panels": 9,
+     "firstScreen": 9,
+     "ragged": [],
+     "voids": [
+      {
+       "gap": 62,
+       "at": 1003,
+       "panel": "Recent activity"
+      },
+      {
+       "gap": 62,
+       "at": 999,
+       "panel": "Active transaction"
+      }
+     ]
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 9,
+     "radii": [
+      [
+       17,
+       4
+      ],
+      [
+       18,
+       2
+      ],
+      [
+       0,
+       1
+      ],
+      [
+       24,
+       1
+      ],
+      [
+       16,
+       1
+      ]
+     ],
+     "heavyBorders": 0,
+     "borderSamples": [],
+     "heavyShadows": 7,
+     "softShadows": 2,
+     "shadowSamples": [
+      "rgba(20, 45, 107, 0.14) 0px 22px 50px 0px",
+      "rgba(23, 52, 107, 0.047) 0px 9px 25px 0px",
+      "rgba(23, 52, 107, 0.047) 0px 9px 25px 0px"
+     ],
+     "glass": 1
+    },
+    "chips": {
+     "count": 7,
+     "hues": 4,
+     "samples": [
+      {
+       "hue": 218,
+       "size": 30,
+       "radius": "9px"
+      },
+      {
+       "hue": 253,
+       "size": 30,
+       "radius": "9px"
+      },
+      {
+       "hue": 146,
+       "size": 30,
+       "radius": "9px"
+      },
+      {
+       "hue": 218,
+       "size": 34,
+       "radius": "10px"
+      }
+     ]
+    },
+    "numbers": {
+     "cells": 0,
+     "leftAligned": 0,
+     "figures": 0,
+     "tabularShare": null,
+     "kpiMax": null
+    },
+    "rows": null,
+    "chartHues": 0,
+    "placeholders": [],
+    "type": {
+     "under13": 0.75,
+     "tiny": 31,
+     "tinySamples": [
+      "Autonomous Commerce 10px",
+      "WORKSPACE 10px",
+      "Local AI engine online 10px",
+      "Buyer workspace 10px"
+     ],
+     "sizes": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      15,
+      18,
+      34,
+      39
+     ]
+    },
+    "title": {
+     "text": "Commerce, in motion.",
+     "size": 39,
+     "top": 139
+    },
+    "colourShare": 0.089
+   },
+   "consoleErrors": []
+  }
+ ],
+ "findings": [
+  {
+   "level": "FAIL",
+   "id": "micro-label",
+   "width": 1440,
+   "message": "9 tiny uppercase letter-spaced labels (e.g. \"WORKSPACE\", \"COMMAND CENTER / 24 OCTOBER 2026\", \"AUTONOMOUS COMMERCE NETWORK\", \"LIVE TRANSACTION GRAPH\").",
+   "fix": "Use sentence-case text at a readable size, or delete the label.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "emoji",
+   "width": 1440,
+   "message": "Emoji in the page: ✦ ✓",
+   "fix": "Remove. Use words or real imagery.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "gradient",
+   "width": 1440,
+   "message": "2 gradient fill(s): aside.sidebar → linear-gradient(rgb(11, 23, 48) 0%, rgb(16, 30, 61) 58%, rgb(17, 27, 53) 100%) | div.commerce-hero → linear-gradient(115deg, rgb(13, 29, 58) 0%, rgb(25, 46, 97) 59%, rgb(54, 75, 154) 100%)",
+   "fix": "Use a flat colour or a real image. The only gradient allowed by default is a neutral scrim over a photo for legibility.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "button-fx",
+   "width": 1440,
+   "message": "Buttons with gradient fill and shadow/glow.",
+   "fix": "Flat fill, one colour.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "contrast",
+   "width": 1440,
+   "message": "Unreadable text: \"CommerceOS\" 2.1:1 (#a2aec0 on #f3f6fb); \"Start a purchase request to see live age\" 2.4:1 (#9aa7ba on #ffffff); \"No active transaction yet.\" 2.4:1 (#9aa7ba on #ffffff); \"Negotiate\" 2.5:1 (#9aa6b9 on #ffffff)",
+   "fix": "Raise contrast to at least 4.5:1 for text, 3:1 for large display.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "dev-server",
+   "width": 1440,
+   "message": "This page is served by a development server (Vite, webpack or Next in dev mode).",
+   "fix": "Run the last gate on the production build too (vite build && vite preview, next build && next start, or the built index.html): minifiers and bundlers change the CSS a visitor receives.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "heavy-shadow",
+   "width": 1440,
+   "message": "7 panel shadow(s) heavy enough to read as floating: rgba(20, 45, 107, 0.14) 0px 22px 50px 0px | rgba(23, 52, 107, 0.047) 0px 9px 25px 0px | rgba(23, 52, 107, 0.047) 0px 9px 25px 0px",
+   "fix": "Panels sit on the ground: separate them with a fill one step from the ground or a quiet 1px border. A shadow, if any, is under 8% black with a small blur. Real overlays (menus, dialogs, popovers) may float.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "icon-chips",
+   "width": 1440,
+   "message": "7 icons sit in tinted squares or circles in 4 different colours.",
+   "fix": "This is the commonest tell of a generated dashboard. Drop the tinted square: a KPI is a label and a number; an icon, if it helps, is plain and in the text colour.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "colour-sprawl",
+   "width": 1440,
+   "message": "22% of the first screen is strongly coloured.",
+   "fix": "Keep the screen neutral and spend colour on data and status: the studied screens sit near 3%, and only tinted styles reach 10–15%, as pale tints rather than saturated fills.",
+   "alsoAt": [
+    768
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "tiny-text",
+   "width": 1440,
+   "message": "31 text blocks under 11px: Autonomous Commerce 10px, WORKSPACE 10px, Local AI engine online 10px, Buyer workspace 10px.",
+   "fix": "Nothing below 11px; secondary text 12px, data 13–14px.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "panel-void",
+   "width": 1440,
+   "message": "2 card(s) hold a blank band inside: 62px in \"Recent activity\", 62px in \"Active transaction\".",
+   "fix": "A card stretches to its neighbour only when it has content to fill. Keep a legend or a note directly under its chart (only an action or a total may sit at a stretched card's foot), let a short card keep its own height (align-items: start), and let a filtered block shrink to its rows."
+  },
+  {
+   "level": "WARN",
+   "id": "app-title-size",
+   "width": 1440,
+   "message": "The h1 is 39px (\"Commerce, in motion.\").",
+   "fix": "An app screen is not a landing page: the title is 18-32px (20-24px on a phone).",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "FAIL",
+   "id": "overflow",
+   "width": 768,
+   "message": "Page scrolls sideways by 132px at 768px. Widest offenders: button.create-btn (+104px), button.primary-btn.command-cta (+104px), div.visual-label.label-top (+36px).",
+   "fix": "Constrain the element that is wider than the viewport (max-width: 100%, or overflow: clip on its section)."
+  }
+ ],
+ "images": [
+  {
+   "viewport": "desktop",
+   "width": 1440,
+   "fold": "C:\\hackto\\.taste-skill\\before\\desktop-fold.jpg",
+   "pages": [
+    "C:\\hackto\\.taste-skill\\before\\desktop-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "tablet",
+   "width": 768,
+   "fold": "C:\\hackto\\.taste-skill\\before\\tablet-fold.jpg",
+   "pages": [
+    "C:\\hackto\\.taste-skill\\before\\tablet-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "mobile",
+   "width": 390,
+   "fold": "C:\\hackto\\.taste-skill\\before\\mobile-fold.jpg",
+   "pages": [
+    "C:\\hackto\\.taste-skill\\before\\mobile-page-01.jpg"
+   ],
+   "film": []
+  }
+ ]
+}
